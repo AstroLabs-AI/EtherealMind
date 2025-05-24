@@ -2,6 +2,7 @@ package com.astrolabs.etherealmind;
 
 import com.astrolabs.etherealmind.client.ClientProxy;
 import com.astrolabs.etherealmind.common.CommonProxy;
+import com.astrolabs.etherealmind.common.chat.CosmoChatListener;
 import com.astrolabs.etherealmind.common.entity.CosmoEntity;
 import com.astrolabs.etherealmind.common.registry.*;
 import com.astrolabs.etherealmind.common.network.NetworkHandler;
@@ -50,6 +51,7 @@ public class EtherealMind {
         
         // Register ourselves for server and other game events
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(CosmoChatListener.class);
     }
     
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {

@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 group = 'com.astrolabs'
-version = '2.0.0'
+version = '3.0.0'
 
 java {
     archivesBaseName = 'etherealmind'

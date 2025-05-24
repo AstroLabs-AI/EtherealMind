@@ -4,26 +4,28 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="etherealmind"
-version="2.0.0"
+version="3.0.0"
 displayName="Ethereal Mind"
 logoFile="etherealmind.png"
 credits="AstroLabs Development Team"
 authors="AstroLabs"
 description='''
-Ethereal Mind: Advanced AI Companion with Leveling System
-Featuring COSMO - Your Evolving Cosmic Companion
+Ethereal Mind: Natural Language AI Companion
+Featuring COSMO - Your Intelligent Cosmic Companion
 
-COSMO is an advanced AI entity that grows with you through a progressive leveling system.
-Starting as a simple storage companion, COSMO evolves into a powerful ally with 
-special abilities, massive storage capacity, and meaningful gameplay progression.
+COSMO is an advanced AI entity that understands natural language commands and grows with you.
+Chat with COSMO naturally, watch them respond with speech bubbles and emotes, and enjoy
+a truly interactive companion experience.
 
 Key Features:
-• Progressive Leveling System (1-10) with XP mechanics
-• Special Abilities: Item Magnet, Auto-Deposit, Healing Aura, Teleport Home
-• Dynamic Storage: 432-3,456 slots based on level
-• Command System: /cosmo level, /cosmo ability, /cosmo stats
-• Animated Entity with 8 facial expressions
-• Persistent progression and save system
+• Natural Language Commands: "COSMO, follow me" or "COSMO, bring me food"
+• Speech Bubbles & Emotes: Visual feedback with personality
+• Smart Item Management: Fetch by category (food, tools, armor, etc.)
+• Environmental Awareness: Comments on weather, time, and surroundings
+• Combat Assistance (Level 5+): Healing, enemy marking, and protection
+• Resource Gathering: Auto-collect items and harvest crops
+• Progressive Leveling System (1-10) with unlockable abilities
+• Massive Storage: 432-3,456 slots based on level
 '''
 
 [[dependencies.etherealmind]]

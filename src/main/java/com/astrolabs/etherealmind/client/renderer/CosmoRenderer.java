@@ -13,11 +13,13 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
-    private static final ResourceLocation TEXTURE = EtherealMind.id("textures/entity/cosmo.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
+    private final CosmoSpeechBubbleRenderer speechBubbleRenderer;
     
     public CosmoRenderer(EntityRendererProvider.Context context) {
         super(context, new CosmoModel());
         this.shadowRadius = 0.0f; // No shadow for ethereal being
+        this.speechBubbleRenderer = new CosmoSpeechBubbleRenderer();
     }
     
     @Override
@@ -36,6 +38,11 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     @Override
     public void render(CosmoEntity entity, float entityYaw, float partialTick, 
                       PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        // Debug: Log render call
+        if (entity.tickCount % 100 == 0) {
+            EtherealMind.LOGGER.info("COSMO render called at position: " + entity.position());
+        }
+        
         // Render main entity
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         
@@ -43,6 +50,10 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         renderEventHorizon(entity, partialTick, poseStack, bufferSource, packedLight);
         renderVoidCenter(entity, partialTick, poseStack, bufferSource, packedLight);
         renderParticles(entity, partialTick, poseStack, bufferSource);
+        
+        // Render speech bubble
+        speechBubbleRenderer.tick();
+        speechBubbleRenderer.render(entity, poseStack, bufferSource, packedLight);
     }
     
     private void renderEventHorizon(CosmoEntity entity, float partialTick, 
@@ -70,19 +81,23 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     
     @Override
     public ResourceLocation getTextureLocation(CosmoEntity entity) {
+        // Debug log
+        if (entity.tickCount % 100 == 0) {
+            EtherealMind.LOGGER.debug("COSMO texture requested: " + TEXTURE.toString());
+        }
         return TEXTURE;
     }
     
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 
                                    MultiBufferSource bufferSource, float partialTick) {
-        // Use emissive render type for glowing effect
-        return RenderType.entityTranslucentEmissive(texture);
+        // Use standard entity translucent for compatibility
+        return RenderType.entityTranslucent(texture);
     }
     
     @Override
     public int getPackedOverlay(CosmoEntity entity, float u) {
-        // Make entity glow
-        return 0xF000F0;
+        // Use default overlay
+        return super.getPackedOverlay(entity, u);
     }
 }

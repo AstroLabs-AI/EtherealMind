@@ -16,6 +16,8 @@ public class SoundRegistry {
     public static final RegistryObject<SoundEvent> COSMO_HAPPY = registerSound("cosmo_happy");
     public static final RegistryObject<SoundEvent> COSMO_CURIOUS = registerSound("cosmo_curious");
     public static final RegistryObject<SoundEvent> COSMO_ALERT = registerSound("cosmo_alert");
+    public static final RegistryObject<SoundEvent> COSMO_CONFUSED = registerSound("cosmo_confused");
+    public static final RegistryObject<SoundEvent> COSMO_ACKNOWLEDGE = registerSound("cosmo_acknowledge");
     public static final RegistryObject<SoundEvent> VOID_PORTAL_OPEN = registerSound("void_portal_open");
     public static final RegistryObject<SoundEvent> DIMENSIONAL_SHIFT = registerSound("dimensional_shift");
     

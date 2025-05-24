@@ -6,9 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class CosmoModel extends GeoModel<CosmoEntity> {
-    private static final ResourceLocation MODEL = EtherealMind.id("geo/cosmo.geo.json");
-    private static final ResourceLocation TEXTURE = EtherealMind.id("textures/entity/cosmo.png");
-    private static final ResourceLocation ANIMATION = EtherealMind.id("animations/cosmo.animation.json");
+    private static final ResourceLocation MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo.geo.json");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
+    private static final ResourceLocation ANIMATION = new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo.animation.json");
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {

@@ -98,6 +98,47 @@ COSMO has several visual features:
 
 ---
 
+## 👤 Interacting with COSMO
+
+### Basic Interactions
+- **Right-click** to open storage and interaction menu
+- **Shift + Right-click** to set COSMO's home position (Level 7+)
+- COSMO will follow you automatically
+- COSMO gains XP from:
+  - Time spent with you (1 XP/minute)
+  - Player interactions (5 XP per 10 interactions)
+  - Special events and achievements
+
+### Natural Language Commands
+COSMO now understands chat commands! Simply type in chat:
+
+**Movement & Behavior:**
+- **"COSMO, follow me"** - Makes COSMO follow you
+- **"COSMO, stay here"** - COSMO stays at current position
+- **"COSMO, guard this area"** - COSMO guards the area
+- **"COSMO, patrol 10"** - Patrol in a radius
+
+**Item Management:**
+- **"COSMO, bring me [item]"** - Fetches items from storage
+- **"COSMO, bring me food"** - Fetches by category (food, tools, armor, etc.)
+
+**Combat Assistance (Level 5+):**
+- **"COSMO, combat on"** - Enable combat help
+- **"COSMO, defend me"** - Defensive mode with healing
+- **"COSMO, combat off"** - Disable combat help
+
+**Resource Gathering:**
+- **"COSMO, collect items"** - Auto-collect dropped items
+- **"COSMO, harvest crops"** - Farm helper (Level 3+)
+
+**Utility:**
+- **"COSMO, help"** - Shows all available commands
+- **"COSMO, status"** - Shows COSMO's current state
+
+See the [Natural Language Commands Guide](NATURAL_LANGUAGE_COMMANDS.md) for the full list of commands and examples.
+
+---
+
 ## 📦 Dimensional Storage System
 
 ### Opening Storage
