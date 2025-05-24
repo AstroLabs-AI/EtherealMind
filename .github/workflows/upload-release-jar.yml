@@ -27,7 +27,7 @@ jobs:
       run: chmod +x gradlew
     
     - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.4.2
     
     - name: Extract version from tag
       id: version
@@ -45,6 +45,8 @@ jobs:
         echo "JAR_NAME=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
     
     - name: Upload JAR to release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release upload ${{ github.event.inputs.release_tag }} \
           "${{ steps.find_jar.outputs.JAR_PATH }}" \
