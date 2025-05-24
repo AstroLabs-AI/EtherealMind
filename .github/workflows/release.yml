@@ -66,12 +66,20 @@ jobs:
         draft: false
         prerelease: false
     
+    - name: Find built JAR
+      id: find_jar
+      run: |
+        JAR_FILE=$(find build/libs -name "*.jar" -not -name "*-sources.jar" | head -1)
+        echo "Found JAR: $JAR_FILE"
+        echo "JAR_PATH=$JAR_FILE" >> $GITHUB_OUTPUT
+        echo "JAR_NAME=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+    
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/libs/etherealmind-1.20.1-${{ steps.version.outputs.VERSION }}.jar
+        asset_path: ${{ steps.find_jar.outputs.JAR_PATH }}
         asset_name: etherealmind-1.20.1-${{ steps.version.outputs.VERSION }}.jar
         asset_content_type: application/java-archive
