@@ -26,15 +26,21 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
+    - name: Verify gradle wrapper
+      run: |
+        echo "Checking gradle wrapper JAR..."
+        ls -la gradle/wrapper/
+        file gradle/wrapper/gradle-wrapper.jar
+        jar tf gradle/wrapper/gradle-wrapper.jar | grep GradleWrapperMain || echo "GradleWrapperMain not found!"
+    
     - name: Extract version from tag
       id: version
       run: echo "VERSION=$(echo '${{ github.event.inputs.release_tag }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
     
     - name: Build with Gradle
       run: |
-        # Ensure gradle wrapper is executable
-        chmod +x gradle/wrapper/gradle-wrapper.jar
-        ./gradlew build --no-daemon
+        # Use java directly to run gradle wrapper
+        java -cp gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain build --no-daemon
     
     - name: Find built JAR
       id: find_jar
