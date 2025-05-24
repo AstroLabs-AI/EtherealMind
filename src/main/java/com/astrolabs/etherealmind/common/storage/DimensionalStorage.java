@@ -179,6 +179,45 @@ public class DimensionalStorage {
         return categories;
     }
     
+    // Methods for Menu integration
+    public void setStackInSlot(int slot, ItemStack stack) {
+        int pageIndex = slot / SLOTS_PER_PAGE;
+        int slotIndex = slot % SLOTS_PER_PAGE;
+        
+        if (pageIndex < pages.size()) {
+            StoragePage page = pages.get(pageIndex);
+            page.getItems().setStackInSlot(slotIndex, stack);
+        }
+    }
+    
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        int pageIndex = slot / SLOTS_PER_PAGE;
+        int slotIndex = slot % SLOTS_PER_PAGE;
+        
+        if (pageIndex < pages.size()) {
+            StoragePage page = pages.get(pageIndex);
+            return page.getItems().extractItem(slotIndex, amount, simulate);
+        }
+        return ItemStack.EMPTY;
+    }
+    
+    public boolean isItemValid(int slot, ItemStack stack) {
+        return !stack.isEmpty();
+    }
+    
+    public int getTotalItemCount() {
+        int count = 0;
+        for (StoragePage page : pages) {
+            for (int i = 0; i < page.getItems().getSlots(); i++) {
+                ItemStack stack = page.getItems().getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    count += stack.getCount();
+                }
+            }
+        }
+        return count;
+    }
+    
     public static class StoragePage {
         private final ItemStackHandler items = new ItemStackHandler(SLOTS_PER_PAGE);
         private final Map<String, Object> metadata = new HashMap<>();

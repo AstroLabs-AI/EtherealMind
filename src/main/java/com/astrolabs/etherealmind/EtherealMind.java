@@ -41,6 +41,7 @@ public class EtherealMind {
         BlockRegistry.register(modEventBus);
         ParticleRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
+        MenuRegistry.register(modEventBus);
         
         // Register setup events
         modEventBus.addListener(this::commonSetup);

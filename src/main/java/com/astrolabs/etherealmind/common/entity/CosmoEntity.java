@@ -163,8 +163,8 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     
     private void openInteractionMenu(Player player) {
         if (!level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-            // Send packet to open storage GUI on client
-            NetworkHandler.sendToPlayer(new OpenStoragePacket(this.getId()), serverPlayer);
+            // Open the storage menu using the new system
+            OpenStoragePacket.sendToClient(serverPlayer, this);
         }
         brain.onInteraction(player);
     }

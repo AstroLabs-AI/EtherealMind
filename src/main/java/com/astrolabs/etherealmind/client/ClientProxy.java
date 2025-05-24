@@ -6,9 +6,11 @@ import com.astrolabs.etherealmind.client.particle.RealityRippleParticle;
 import com.astrolabs.etherealmind.client.renderer.CosmoRenderer;
 import com.astrolabs.etherealmind.common.CommonProxy;
 import com.astrolabs.etherealmind.common.registry.EntityRegistry;
+import com.astrolabs.etherealmind.common.registry.MenuRegistry;
 import com.astrolabs.etherealmind.common.registry.ParticleRegistry;
 import com.astrolabs.etherealmind.common.storage.DimensionalStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +22,9 @@ public class ClientProxy extends CommonProxy {
     public void clientInit() {
         // Register entity renderers
         EntityRenderers.register(EntityRegistry.COSMO.get(), CosmoRenderer::new);
+        
+        // Register menu screens
+        MenuScreens.register(MenuRegistry.DIMENSIONAL_STORAGE_MENU.get(), DimensionalStorageScreen::new);
     }
     
     @SubscribeEvent
@@ -28,10 +33,5 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().particleEngine.register(ParticleRegistry.REALITY_RIPPLE.get(), RealityRippleParticle.Provider::new);
     }
     
-    public static void openDimensionalStorage(DimensionalStorage storage) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null) {
-            minecraft.setScreen(new DimensionalStorageScreen(storage, minecraft.player));
-        }
-    }
+    // Removed - now handled by menu system
 }

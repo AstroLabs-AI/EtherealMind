@@ -21,8 +21,8 @@ public class NetworkHandler {
     public static void register() {
         int id = 0;
         
-        // Server to Client
-        INSTANCE.messageBuilder(OpenStoragePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+        // Client to Server (Request to open storage)
+        INSTANCE.messageBuilder(OpenStoragePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(OpenStoragePacket::encode)
                 .decoder(OpenStoragePacket::decode)
                 .consumerMainThread((packet, ctx) -> {
@@ -31,6 +31,7 @@ public class NetworkHandler {
                 })
                 .add();
         
+        // Client to Server (Storage actions)
         INSTANCE.messageBuilder(StorageActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(StorageActionPacket::encode)
                 .decoder(StorageActionPacket::decode)
