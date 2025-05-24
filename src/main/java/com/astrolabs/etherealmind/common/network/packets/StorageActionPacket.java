@@ -13,7 +13,9 @@ public class StorageActionPacket {
         SEARCH,
         QUICK_ACCESS_HOTKEY,
         MOVE_TO_QUICK_ACCESS,
-        SYNC_SLOT
+        SYNC_SLOT,
+        REQUEST_UPDATE,
+        TOGGLE_SORT
     }
     
     private final Action action;

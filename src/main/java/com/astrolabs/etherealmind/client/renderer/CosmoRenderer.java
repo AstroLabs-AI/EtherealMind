@@ -157,8 +157,8 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 
                                    @Nullable MultiBufferSource bufferSource, float partialTick) {
-        // Use cutout for crisp robotic appearance
-        return RenderType.entityCutoutNoCull(texture);
+        // Use translucent for proper rendering with transparency
+        return RenderType.entityTranslucent(texture);
     }
     
     @Override

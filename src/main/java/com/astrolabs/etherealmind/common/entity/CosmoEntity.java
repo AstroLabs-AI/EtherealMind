@@ -70,6 +70,21 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     private String currentEmote = "";
     private int speechBubbleTimer = 0;
     
+    // Advanced animation properties
+    private float renderScale = 1.0f;
+    private float eyeTargetYaw = 0.0f;
+    private float eyeTargetPitch = 0.0f;
+    private float antennaRotationX = 0.0f;
+    private float antennaRotationY = 0.0f;
+    private float antennaRotationZ = 0.0f;
+    private float earFinRotationX = 0.0f;
+    private float earFinRotationY = 0.0f;
+    private float earFinRotationZ = 0.0f;
+    private float engineGlow = 1.0f;
+    private boolean isTeleporting = false;
+    private boolean isAccessingStorage = false;
+    private boolean isScanning = false;
+    
     public CosmoEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
         this.brain = new CosmoAI(this);
@@ -167,6 +182,11 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
         
         // Particle effects
         updateParticles();
+        
+        // Apply physics-based animations (client-side)
+        if (level().isClientSide) {
+            com.astrolabs.etherealmind.client.renderer.AdvancedCosmoAnimationController.applyPhysicsAnimations(this);
+        }
     }
     
     private void teleportToPlayer() {
@@ -279,15 +299,24 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
         behavior.load(compound);
     }
     
-    // GeckoLib animation
+    // GeckoLib animation - Advanced system with multiple controllers
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
-    }
-    
-    private PlayState predicate(software.bernie.geckolib.core.animation.AnimationState<CosmoEntity> animationState) {
-        animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
-        return PlayState.CONTINUE;
+        // Main animation controller with smooth transitions
+        controllers.add(new AnimationController<>(this, "main_controller", 5, 
+            com.astrolabs.etherealmind.client.renderer.AdvancedCosmoAnimationController::handleAnimations));
+        
+        // Blink controller for independent blinking
+        controllers.add(new AnimationController<>(this, "blink_controller", 0, state -> {
+            // Blink handling is done in the main controller
+            return PlayState.CONTINUE;
+        }));
+        
+        // Expression controller for facial animations
+        controllers.add(new AnimationController<>(this, "expression_controller", 10, state -> {
+            // Expression handling based on mood
+            return PlayState.CONTINUE;
+        }));
     }
     
     @Override
@@ -438,4 +467,48 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
             ));
         }
     }
+    
+    // Advanced animation getters and setters
+    public float getRenderScale() { return renderScale; }
+    public void setRenderScale(float scale) { this.renderScale = scale; }
+    
+    public void setEyeTarget(float yaw, float pitch) {
+        this.eyeTargetYaw = yaw;
+        this.eyeTargetPitch = pitch;
+    }
+    
+    public float getEyeTargetYaw() { return eyeTargetYaw; }
+    public float getEyeTargetPitch() { return eyeTargetPitch; }
+    
+    public void setAntennaRotation(float x, float y, float z) {
+        this.antennaRotationX = x;
+        this.antennaRotationY = y;
+        this.antennaRotationZ = z;
+    }
+    
+    public float getAntennaRotationX() { return antennaRotationX; }
+    public float getAntennaRotationY() { return antennaRotationY; }
+    public float getAntennaRotationZ() { return antennaRotationZ; }
+    
+    public void setEarFinRotation(float x, float y, float z) {
+        this.earFinRotationX = x;
+        this.earFinRotationY = y;
+        this.earFinRotationZ = z;
+    }
+    
+    public float getEarFinRotationX() { return earFinRotationX; }
+    public float getEarFinRotationY() { return earFinRotationY; }
+    public float getEarFinRotationZ() { return earFinRotationZ; }
+    
+    public float getEngineGlow() { return engineGlow; }
+    public void setEngineGlow(float glow) { this.engineGlow = glow; }
+    
+    public boolean isTeleporting() { return isTeleporting; }
+    public void setTeleporting(boolean teleporting) { this.isTeleporting = teleporting; }
+    
+    public boolean isAccessingStorage() { return isAccessingStorage; }
+    public void setAccessingStorage(boolean accessing) { this.isAccessingStorage = accessing; }
+    
+    public boolean isScanning() { return isScanning; }
+    public void setScanning(boolean scanning) { this.isScanning = scanning; }
 }

@@ -28,11 +28,11 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
     private static final int SLOTS_PER_PAGE = STORAGE_ROWS * STORAGE_COLS;
     private static final int QUICK_ACCESS_SLOTS = 9;
     
-    // GUI positioning
+    // GUI positioning - updated to match new companion GUI
     private static final int STORAGE_START_X = 8;
-    private static final int STORAGE_START_Y = 35;
-    private static final int QUICK_ACCESS_Y = 155;
-    private static final int PLAYER_INV_Y = 180;
+    private static final int STORAGE_START_Y = 18;
+    private static final int QUICK_ACCESS_Y = 140;
+    private static final int PLAYER_INV_Y = 176;
     
     // Client constructor
     public DimensionalStorageMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
@@ -212,6 +212,7 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
             addQuickAccessSlots();
         }
     }
+    
     
     // Custom slot for storage
     public static class StorageSlot extends Slot {

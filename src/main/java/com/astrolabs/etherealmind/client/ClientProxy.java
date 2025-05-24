@@ -4,7 +4,7 @@ import com.astrolabs.etherealmind.client.gui.DimensionalStorageScreen;
 import com.astrolabs.etherealmind.client.gui.CosmoCompanionScreen;
 import com.astrolabs.etherealmind.client.particle.CosmicParticle;
 import com.astrolabs.etherealmind.client.particle.RealityRippleParticle;
-import com.astrolabs.etherealmind.client.renderer.CosmoRenderer;
+import com.astrolabs.etherealmind.client.renderer.AdvancedCosmoRenderer;
 import com.astrolabs.etherealmind.common.CommonProxy;
 import com.astrolabs.etherealmind.common.registry.EntityRegistry;
 import com.astrolabs.etherealmind.common.registry.MenuRegistry;
@@ -21,8 +21,8 @@ public class ClientProxy extends CommonProxy {
     
     @Override
     public void clientInit() {
-        // Register entity renderers
-        EntityRenderers.register(EntityRegistry.COSMO.get(), CosmoRenderer::new);
+        // Register entity renderers - use advanced renderer for full 3D experience
+        EntityRenderers.register(EntityRegistry.COSMO.get(), AdvancedCosmoRenderer::new);
         
         // Register menu screens - use new companion screen
         MenuScreens.register(MenuRegistry.DIMENSIONAL_STORAGE_MENU.get(), CosmoCompanionScreen::new);
