@@ -7,15 +7,29 @@ on:
         description: 'Release tag (e.g., v3.0.0)'
         required: true
         default: 'v3.0.0'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/upload-release-jar.yml'
 
 jobs:
   upload-jar:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Set release tag
+      id: set_tag
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "RELEASE_TAG=${{ github.event.inputs.release_tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "RELEASE_TAG=v3.0.0" >> $GITHUB_OUTPUT
+        fi
+    
     - uses: actions/checkout@v3
       with:
-        ref: ${{ github.event.inputs.release_tag }}
+        ref: ${{ steps.set_tag.outputs.RELEASE_TAG }}
     
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -35,7 +49,7 @@ jobs:
     
     - name: Extract version from tag
       id: version
-      run: echo "VERSION=$(echo '${{ github.event.inputs.release_tag }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
+      run: echo "VERSION=$(echo '${{ steps.set_tag.outputs.RELEASE_TAG }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
     
     - name: Build with Gradle
       run: |
@@ -54,7 +68,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release upload ${{ github.event.inputs.release_tag }} \
+        gh release upload ${{ steps.set_tag.outputs.RELEASE_TAG }} \
           "${{ steps.find_jar.outputs.JAR_PATH }}" \
           --clobber \
           --repo ${{ github.repository }}
