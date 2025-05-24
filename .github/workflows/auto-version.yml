@@ -1,0 +1,128 @@
+name: Auto Version & Release
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'docs/**'
+
+jobs:
+  check-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Get latest tag
+      id: latest_tag
+      run: |
+        git fetch --tags
+        echo "TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo 'v0.0.0')" >> $GITHUB_OUTPUT
+    
+    - name: Analyze commits
+      id: analyze
+      run: |
+        LATEST_TAG=${{ steps.latest_tag.outputs.TAG }}
+        
+        # Count different types of commits since last tag
+        FEATURES=$(git log ${LATEST_TAG}..HEAD --pretty=format:"%s" | grep -i "^feat\|^add\|^new" | wc -l)
+        FIXES=$(git log ${LATEST_TAG}..HEAD --pretty=format:"%s" | grep -i "^fix\|^bug" | wc -l)
+        BREAKING=$(git log ${LATEST_TAG}..HEAD --pretty=format:"%s" | grep -i "BREAKING CHANGE" | wc -l)
+        
+        # Determine version bump type
+        if [ $BREAKING -gt 0 ]; then
+          echo "BUMP=major" >> $GITHUB_OUTPUT
+        elif [ $FEATURES -gt 0 ]; then
+          echo "BUMP=minor" >> $GITHUB_OUTPUT
+        elif [ $FIXES -gt 0 ]; then
+          echo "BUMP=patch" >> $GITHUB_OUTPUT
+        else
+          echo "BUMP=none" >> $GITHUB_OUTPUT
+        fi
+        
+        echo "FEATURES=$FEATURES" >> $GITHUB_OUTPUT
+        echo "FIXES=$FIXES" >> $GITHUB_OUTPUT
+        echo "BREAKING=$BREAKING" >> $GITHUB_OUTPUT
+    
+    - name: Calculate new version
+      id: new_version
+      if: steps.analyze.outputs.BUMP != 'none'
+      run: |
+        CURRENT_VERSION=${{ steps.latest_tag.outputs.TAG }}
+        CURRENT_VERSION=${CURRENT_VERSION#v}
+        
+        IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+        MAJOR=${VERSION_PARTS[0]:-0}
+        MINOR=${VERSION_PARTS[1]:-0}
+        PATCH=${VERSION_PARTS[2]:-0}
+        
+        case "${{ steps.analyze.outputs.BUMP }}" in
+          major)
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            ;;
+          minor)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            ;;
+          patch)
+            PATCH=$((PATCH + 1))
+            ;;
+        esac
+        
+        NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+        echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+    
+    - name: Generate changelog
+      id: changelog
+      if: steps.analyze.outputs.BUMP != 'none'
+      run: |
+        cat << 'EOF' > changelog.md
+        ## What's Changed
+        
+        EOF
+        
+        if [ ${{ steps.analyze.outputs.FEATURES }} -gt 0 ]; then
+          echo "### ✨ New Features" >> changelog.md
+          git log ${{ steps.latest_tag.outputs.TAG }}..HEAD --pretty=format:"- %s" | grep -i "^feat\|^add\|^new" >> changelog.md
+          echo "" >> changelog.md
+        fi
+        
+        if [ ${{ steps.analyze.outputs.FIXES }} -gt 0 ]; then
+          echo "### 🐛 Bug Fixes" >> changelog.md
+          git log ${{ steps.latest_tag.outputs.TAG }}..HEAD --pretty=format:"- %s" | grep -i "^fix\|^bug" >> changelog.md
+          echo "" >> changelog.md
+        fi
+        
+        echo "### 📝 Other Changes" >> changelog.md
+        git log ${{ steps.latest_tag.outputs.TAG }}..HEAD --pretty=format:"- %s" | grep -v -i "^feat\|^add\|^new\|^fix\|^bug" | head -10 >> changelog.md
+    
+    - name: Create release commit and tag
+      if: steps.analyze.outputs.BUMP != 'none'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        
+        # Update version in files
+        sed -i "s/version = '.*'/version = '${{ steps.new_version.outputs.VERSION }}'/" build.gradle
+        sed -i 's/version=".*"/version="${{ steps.new_version.outputs.VERSION }}"/' src/main/resources/META-INF/mods.toml
+        
+        # Commit changes
+        git add build.gradle src/main/resources/META-INF/mods.toml
+        git commit -m "chore: bump version to ${{ steps.new_version.outputs.VERSION }}" || echo "No changes to commit"
+        
+        # Create tag
+        git tag -a "v${{ steps.new_version.outputs.VERSION }}" -m "Release v${{ steps.new_version.outputs.VERSION }}"
+        
+        # Push changes
+        git push origin main
+        git push origin "v${{ steps.new_version.outputs.VERSION }}"

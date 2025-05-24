@@ -1,0 +1,163 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type (major, minor, patch)'
+        required: false
+        default: 'patch'
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
+    
+    - name: Run tests
+      run: ./gradlew test
+      continue-on-error: true
+    
+    - name: Generate test report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Gradle Tests
+        path: build/test-results/test/*.xml
+        reporter: java-junit
+    
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    - name: Build with Gradle
+      run: ./gradlew clean build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mod-jars
+        path: build/libs/*.jar
+        retention-days: 30
+    
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Get latest tag
+      id: latest_tag
+      run: |
+        git fetch --tags
+        echo "TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo 'v0.0.0')" >> $GITHUB_OUTPUT
+    
+    - name: Check for version bump
+      id: check_bump
+      run: |
+        # Check commit messages for version indicators
+        COMMITS=$(git log ${{ steps.latest_tag.outputs.TAG }}..HEAD --pretty=format:"%s")
+        
+        if echo "$COMMITS" | grep -q "BREAKING CHANGE\|!:"; then
+          echo "BUMP=major" >> $GITHUB_OUTPUT
+        elif echo "$COMMITS" | grep -q "^feat\|^feature"; then
+          echo "BUMP=minor" >> $GITHUB_OUTPUT
+        elif echo "$COMMITS" | grep -q "^fix\|^bugfix"; then
+          echo "BUMP=patch" >> $GITHUB_OUTPUT
+        else
+          echo "BUMP=none" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Bump version
+      id: bump_version
+      if: steps.check_bump.outputs.BUMP != 'none' || github.event_name == 'workflow_dispatch'
+      uses: mathieudutour/github-tag-action@v6.1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        default_bump: ${{ github.event.inputs.release_type || steps.check_bump.outputs.BUMP || 'patch' }}
+        tag_prefix: v
+        create_annotated_tag: true
+        
+    - name: Download artifacts
+      if: steps.bump_version.outputs.new_tag
+      uses: actions/download-artifact@v3
+      with:
+        name: mod-jars
+        path: ./release-jars
+    
+    - name: Generate changelog
+      id: changelog
+      if: steps.bump_version.outputs.new_tag
+      run: |
+        echo "# Changelog" > changelog.md
+        echo "" >> changelog.md
+        echo "## ${{ steps.bump_version.outputs.new_tag }}" >> changelog.md
+        echo "" >> changelog.md
+        git log ${{ steps.latest_tag.outputs.TAG }}..HEAD --pretty=format:"- %s" >> changelog.md
+    
+    - name: Create Release
+      if: steps.bump_version.outputs.new_tag
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.bump_version.outputs.new_tag }}
+        name: EtherealMind ${{ steps.bump_version.outputs.new_tag }}
+        body: ${{ steps.bump_version.outputs.changelog }}
+        files: release-jars/*.jar
+        draft: false
+        prerelease: false

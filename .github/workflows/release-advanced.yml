@@ -1,0 +1,98 @@
+name: Advanced Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 8.1.1
+    
+    - name: Extract version info
+      id: version
+      run: |
+        echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        echo "MC_VERSION=1.20.1" >> $GITHUB_OUTPUT
+        echo "FORGE_VERSION=47.2.0" >> $GITHUB_OUTPUT
+    
+    - name: Update version in files
+      run: |
+        sed -i "s/version = '.*'/version = '${{ steps.version.outputs.VERSION }}'/" build.gradle
+        sed -i 's/version=".*"/version="${{ steps.version.outputs.VERSION }}"/' src/main/resources/META-INF/mods.toml
+    
+    - name: Build mod
+      run: ./gradlew clean build
+    
+    - name: Calculate file hash
+      id: hash
+      run: |
+        echo "SHA256=$(sha256sum build/libs/etherealmind-${{ steps.version.outputs.MC_VERSION }}-${{ steps.version.outputs.VERSION }}.jar | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+    
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        cat << EOF > release_notes.md
+        # EtherealMind ${{ steps.version.outputs.VERSION }}
+        
+        ## Requirements
+        - Minecraft ${{ steps.version.outputs.MC_VERSION }}
+        - Forge ${{ steps.version.outputs.FORGE_VERSION }} or higher
+        - GeckoLib 4.2.4
+        
+        ## Changes
+        $(git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" | grep -v "Merge" | head -20)
+        
+        ## Installation
+        1. Download \`etherealmind-${{ steps.version.outputs.MC_VERSION }}-${{ steps.version.outputs.VERSION }}.jar\`
+        2. Place in your mods folder
+        3. Launch Minecraft with Forge
+        
+        ## File Information
+        - **Filename**: etherealmind-${{ steps.version.outputs.MC_VERSION }}-${{ steps.version.outputs.VERSION }}.jar
+        - **SHA256**: ${{ steps.hash.outputs.SHA256 }}
+        - **Minecraft**: ${{ steps.version.outputs.MC_VERSION }}
+        - **Forge**: ${{ steps.version.outputs.FORGE_VERSION }}+
+        
+        ## Quick Start
+        - Spawn COSMO: \`/give @p etherealmind:cosmo_spawn_egg\`
+        - Chat commands: Type "COSMO, help" in chat
+        - Open storage: Right-click COSMO
+        
+        ## Documentation
+        - [User Guide](https://github.com/AstroLabs-AI/EtherealMind/blob/main/docs/GUIDE.md)
+        - [Natural Language Commands](https://github.com/AstroLabs-AI/EtherealMind/blob/main/docs/NATURAL_LANGUAGE_COMMANDS.md)
+        - [Troubleshooting](https://github.com/AstroLabs-AI/EtherealMind/blob/main/docs/TROUBLESHOOTING.md)
+        EOF
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: EtherealMind ${{ steps.version.outputs.VERSION }}
+        body_path: release_notes.md
+        files: |
+          build/libs/etherealmind-${{ steps.version.outputs.MC_VERSION }}-${{ steps.version.outputs.VERSION }}.jar
+        fail_on_unmatched_files: true
+        generate_release_notes: false

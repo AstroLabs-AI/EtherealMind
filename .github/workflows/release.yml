@@ -1,0 +1,77 @@
+name: Release Mod
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Full history for changelog
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Build with Gradle
+      run: ./gradlew build
+    
+    - name: Generate changelog
+      id: changelog
+      uses: requarks/changelog-action@v1
+      with:
+        token: ${{ github.token }}
+        tag: ${{ github.ref_name }}
+        includeInvalidCommits: false
+        writeToFile: false
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: EtherealMind ${{ github.ref_name }}
+        body: |
+          ## Changes in this Release
+          ${{ steps.changelog.outputs.changes }}
+          
+          ## Installation
+          1. Download `etherealmind-1.20.1-${{ steps.version.outputs.VERSION }}.jar`
+          2. Place in your mods folder
+          3. Requires Forge 47.2.0+ and GeckoLib 4.2.4
+          
+          ## Requirements
+          - Minecraft 1.20.1
+          - Forge 47.2.0 or higher
+          - GeckoLib 4.2.4
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/libs/etherealmind-1.20.1-${{ steps.version.outputs.VERSION }}.jar
+        asset_name: etherealmind-1.20.1-${{ steps.version.outputs.VERSION }}.jar
+        asset_content_type: application/java-archive
