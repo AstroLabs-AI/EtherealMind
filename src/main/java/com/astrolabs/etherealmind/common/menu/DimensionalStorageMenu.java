@@ -137,6 +137,10 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
         return storage;
     }
     
+    public CosmoEntity getCosmo() {
+        return cosmo;
+    }
+    
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack returnStack = ItemStack.EMPTY;

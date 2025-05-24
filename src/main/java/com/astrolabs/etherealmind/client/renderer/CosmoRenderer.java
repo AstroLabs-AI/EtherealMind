@@ -81,11 +81,11 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE));
         Matrix4f matrix = poseStack.last().pose();
         
-        // Get mood colors
-        int[] colors = CosmoAnimationController.getParticleColors(entity);
-        float r = colors[0] / 255.0f;
-        float g = colors[1] / 255.0f;
-        float b = colors[2] / 255.0f;
+        // Get mood colors - temporarily use fixed colors for debugging
+        // int[] colors = CosmoAnimationController.getParticleColors(entity);
+        float r = 0.5f; // colors[0] / 255.0f;
+        float g = 0.3f; // colors[1] / 255.0f;
+        float b = 0.8f; // colors[2] / 255.0f;
         
         // Render distortion ring segments
         int segments = 16;
@@ -157,8 +157,8 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 
                                    @Nullable MultiBufferSource bufferSource, float partialTick) {
-        // Use cutout for now to ensure texture shows properly
-        return RenderType.entityCutoutNoCull(texture);
+        // Use solid rendering to ensure texture shows properly with eyes
+        return RenderType.entitySolid(texture);
     }
     
     @Override
