@@ -41,9 +41,10 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, 
                        partialTick, packedLight, packedOverlay, red, green, blue, alpha);
         
-        // Scale based on energy level
-        float scale = 0.8f + (entity.getEnergyLevel() * 0.4f);
-        poseStack.scale(scale, scale, scale);
+        // Scale down to make COSMO smaller
+        float baseScale = 0.6f; // Make COSMO 60% of original size
+        float energyScale = baseScale + (entity.getEnergyLevel() * 0.2f);
+        poseStack.scale(energyScale, energyScale, energyScale);
     }
     
     @Override
@@ -157,8 +158,8 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 
                                    @Nullable MultiBufferSource bufferSource, float partialTick) {
-        // Use cutout for solid rendering without transparency
-        return RenderType.entityCutoutNoCull(texture);
+        // Use solid render type to prevent transparency issues
+        return RenderType.entitySolid(texture);
     }
     
     @Override

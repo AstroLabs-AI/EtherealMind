@@ -26,17 +26,18 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use cute model that we know works
-        EtherealMind.LOGGER.info("Loading COSMO model: " + CUTE_MODEL.toString());
-        return CUTE_MODEL;
+        // Use improved model with 3D arms and smaller size
+        ResourceLocation improvedModel = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_improved.geo.json");
+        EtherealMind.LOGGER.info("Loading COSMO model: " + improvedModel.toString());
+        return improvedModel;
     }
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use the properly sized cute texture
-        ResourceLocation properTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_cute_proper.png");
-        EtherealMind.LOGGER.info("Loading COSMO texture: " + properTexture.toString());
-        return properTexture;
+        // Use the improved texture with 3D arm textures
+        ResourceLocation improvedTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_improved.png");
+        EtherealMind.LOGGER.info("Loading COSMO texture: " + improvedTexture.toString());
+        return improvedTexture;
     }
     
     @Override
