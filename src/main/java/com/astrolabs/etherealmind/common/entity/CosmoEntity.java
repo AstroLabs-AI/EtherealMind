@@ -170,7 +170,7 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     }
     
     private void teleportToPlayer() {
-        if (boundPlayer != null) {
+        if (boundPlayer != null && boundPlayer.isAlive()) {
             Vec3 targetPos = boundPlayer.position().add(
                 random.nextGaussian() * 2,
                 2,

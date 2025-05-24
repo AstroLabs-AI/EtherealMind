@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class CosmoModel extends GeoModel<CosmoEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo.geo.json");
+    private static final ResourceLocation MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_simple.geo.json");
     private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
     private static final ResourceLocation ANIMATION = new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo.animation.json");
     

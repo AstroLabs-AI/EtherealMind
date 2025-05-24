@@ -21,6 +21,60 @@
       }
     ]
   },
+  "cosmo_curious": {
+    "subtitle": "sound.etherealmind.cosmo_curious",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/curious",
+        "stream": false
+      }
+    ]
+  },
+  "cosmo_alert": {
+    "subtitle": "sound.etherealmind.cosmo_alert",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/alert",
+        "stream": false
+      }
+    ]
+  },
+  "cosmo_confused": {
+    "subtitle": "sound.etherealmind.cosmo_confused",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/confused",
+        "stream": false
+      }
+    ]
+  },
+  "cosmo_acknowledge": {
+    "subtitle": "sound.etherealmind.cosmo_acknowledge",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/acknowledge",
+        "stream": false
+      }
+    ]
+  },
+  "void_portal_open": {
+    "subtitle": "sound.etherealmind.void_portal_open",
+    "sounds": [
+      {
+        "name": "etherealmind:misc/void_portal",
+        "stream": false
+      }
+    ]
+  },
+  "dimensional_shift": {
+    "subtitle": "sound.etherealmind.dimensional_shift",
+    "sounds": [
+      {
+        "name": "etherealmind:misc/dimensional_shift",
+        "stream": false
+      }
+    ]
+  },
   "storage_open": {
     "subtitle": "sound.etherealmind.storage_open",
     "sounds": [
