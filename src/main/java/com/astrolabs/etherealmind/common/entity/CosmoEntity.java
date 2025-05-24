@@ -407,6 +407,10 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
         return resourceGatherer;
     }
     
+    public boolean hasSpeechBubble() {
+        return speechBubbleTimer > 0 && !speechBubbleMessage.isEmpty();
+    }
+    
     private CompoundTag saveAbilities() {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("ItemMagnet", abilities.isItemMagnetEnabled());

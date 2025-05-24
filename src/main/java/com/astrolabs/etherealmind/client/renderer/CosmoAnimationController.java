@@ -60,18 +60,7 @@ public class CosmoAnimationController {
     }
     
     public static ResourceLocation getAnimatedTexture(CosmoEntity entity, float partialTick) {
-        AnimationState state = getAnimationState(entity, partialTick);
-        
-        // Use detailed texture for higher level COSMOs
-        if (entity.getLevel() >= 3) {
-            return new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_detailed.png");
-        }
-        
-        // Return mood-specific texture if available
-        String moodTexture = String.format("textures/entity/cosmo_%s.png", state.mood.toLowerCase());
-        ResourceLocation moodLocation = new ResourceLocation(EtherealMind.MOD_ID, moodTexture);
-        
-        // Fall back to default animated texture
+        // Always use the main texture for now to ensure it's properly loaded
         return new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
     }
     

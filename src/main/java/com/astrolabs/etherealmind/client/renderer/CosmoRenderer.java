@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import org.joml.Matrix4f;
+import javax.annotation.Nullable;
 
 public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
@@ -23,12 +24,13 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         super(context, new CosmoModel());
         this.shadowRadius = 0.0f; // No shadow for ethereal being
         this.speechBubbleRenderer = new CosmoSpeechBubbleRenderer();
+        // Don't add glow layer yet - fix basic rendering first
     }
     
     @Override
     public ResourceLocation getTextureLocation(CosmoEntity entity) {
-        // Use animated texture system
-        return CosmoAnimationController.getAnimatedTexture(entity, 0);
+        // Use the main texture directly to ensure it loads properly
+        return TEXTURE;
     }
     
     @Override
@@ -47,18 +49,17 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     @Override
     public void render(CosmoEntity entity, float entityYaw, float partialTick, 
                       PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        // Debug: Log render call
-        if (entity.tickCount % 100 == 0) {
-            EtherealMind.LOGGER.info("COSMO render called at position: " + entity.position());
-        }
-        
-        // Render main entity
+        // Render main entity first with proper transparency
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         
-        // Render additional layers
-        renderEventHorizon(entity, partialTick, poseStack, bufferSource, packedLight);
-        renderVoidCenter(entity, partialTick, poseStack, bufferSource, packedLight);
-        renderParticles(entity, partialTick, poseStack, bufferSource);
+        // Only render additional effects if entity is properly visible
+        if (entity.isInvisible()) return;
+        
+        // Render additional layers with reduced complexity
+        // Temporarily disable extra effects to debug texture issue
+        // renderEventHorizon(entity, partialTick, poseStack, bufferSource, packedLight);
+        // renderVoidCenter(entity, partialTick, poseStack, bufferSource, packedLight);
+        // renderParticles(entity, partialTick, poseStack, bufferSource);
         
         // Render speech bubble
         speechBubbleRenderer.tick();
@@ -130,7 +131,8 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-time));
         poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(time * 0.7f));
         
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.endPortal());
+        // Use translucent emissive instead of end portal to avoid random blocks
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE));
         Matrix4f matrix = poseStack.last().pose();
         
         // Simple void cube with distortion
@@ -154,9 +156,9 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 
-                                   MultiBufferSource bufferSource, float partialTick) {
-        // Use standard entity translucent for compatibility
-        return RenderType.entityTranslucent(texture);
+                                   @Nullable MultiBufferSource bufferSource, float partialTick) {
+        // Use cutout for now to ensure texture shows properly
+        return RenderType.entityCutoutNoCull(texture);
     }
     
     @Override

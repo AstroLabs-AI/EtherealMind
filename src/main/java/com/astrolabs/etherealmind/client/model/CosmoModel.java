@@ -24,8 +24,8 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use texture based on mood/animation state
-        return CosmoAnimationController.getAnimatedTexture(object, 0);
+        // Always use the main texture to ensure proper loading
+        return TEXTURE;
     }
     
     @Override
@@ -39,7 +39,7 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     private boolean useDetailedModel() {
         // TODO: Add client config option for model detail level
-        // For now, always use detailed model if available
-        return true;
+        // For now, use simple model to avoid issues
+        return false;
     }
 }
