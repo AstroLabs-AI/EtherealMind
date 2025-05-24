@@ -15,26 +15,20 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use detailed model for higher level COSMOs
-        if (object.getLevel() >= 3 || useDetailedModel()) {
-            return DETAILED_MODEL;
-        }
-        return SIMPLE_MODEL;
+        // Always use cute model now
+        return new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_cute.geo.json");
     }
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Always use the main texture to ensure proper loading
-        return TEXTURE;
+        // Use cute texture
+        return new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_cute.png");
     }
     
     @Override
     public ResourceLocation getAnimationResource(CosmoEntity animatable) {
-        // Use detailed animations for higher level COSMOs
-        if (animatable.getLevel() >= 3 || useDetailedModel()) {
-            return DETAILED_ANIMATION;
-        }
-        return SIMPLE_ANIMATION;
+        // Use cute animations
+        return new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo_cute.animation.json");
     }
     
     private boolean useDetailedModel() {
