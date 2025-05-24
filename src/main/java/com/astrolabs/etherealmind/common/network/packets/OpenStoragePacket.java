@@ -1,36 +1,40 @@
 package com.astrolabs.etherealmind.common.network.packets;
 
+import com.astrolabs.etherealmind.client.ClientProxy;
 import com.astrolabs.etherealmind.common.entity.CosmoEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.UUID;
-
 public class OpenStoragePacket {
-    private final UUID cosmoId;
+    private final int entityId;
     
-    public OpenStoragePacket(UUID cosmoId) {
-        this.cosmoId = cosmoId;
+    public OpenStoragePacket(int entityId) {
+        this.entityId = entityId;
     }
     
     public static void encode(OpenStoragePacket packet, FriendlyByteBuf buf) {
-        buf.writeUUID(packet.cosmoId);
+        buf.writeVarInt(packet.entityId);
     }
     
     public static OpenStoragePacket decode(FriendlyByteBuf buf) {
-        return new OpenStoragePacket(buf.readUUID());
+        return new OpenStoragePacket(buf.readVarInt());
     }
     
     public static void handle(OpenStoragePacket packet, NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
-            ServerPlayer player = ctx.getSender();
-            if (player != null) {
-                CosmoEntity cosmo = CosmoEntity.getCosmoForPlayer(player);
-                if (cosmo != null && cosmo.getUUID().equals(packet.cosmoId)) {
-                    // TODO: Open storage GUI
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.level != null) {
+                    Entity entity = mc.level.getEntity(packet.entityId);
+                    if (entity instanceof CosmoEntity cosmo) {
+                        ClientProxy.openDimensionalStorage(cosmo.getStorage());
+                    }
                 }
-            }
+            });
         });
         ctx.setPacketHandled(true);
     }

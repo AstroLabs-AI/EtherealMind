@@ -1,12 +1,15 @@
 package com.astrolabs.etherealmind.common.entity;
 
 import com.astrolabs.etherealmind.common.ai.CosmoAI;
+import com.astrolabs.etherealmind.common.network.NetworkHandler;
+import com.astrolabs.etherealmind.common.network.packets.OpenStoragePacket;
 import com.astrolabs.etherealmind.common.storage.DimensionalStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -159,7 +162,10 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     }
     
     private void openInteractionMenu(Player player) {
-        // Will implement GUI opening
+        if (!level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+            // Send packet to open storage GUI on client
+            NetworkHandler.sendToPlayer(new OpenStoragePacket(this.getId()), serverPlayer);
+        }
         brain.onInteraction(player);
     }
     
