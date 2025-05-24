@@ -13,8 +13,8 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     private static final ResourceLocation CUTE_MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_cute.geo.json");
     
     // Advanced model resources
-    private static final ResourceLocation ADVANCED_MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_advanced.geo.json");
-    private static final ResourceLocation ADVANCED_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced.png");
+    private static final ResourceLocation ADVANCED_MODEL = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_advanced_cute.geo.json");
+    private static final ResourceLocation ADVANCED_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced_cute.png");
     private static final ResourceLocation ADVANCED_ANIMATION = new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo_advanced.animation.json");
     
     // Legacy textures
@@ -26,22 +26,22 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use advanced model for full 3D experience
-        EtherealMind.LOGGER.debug("Loading COSMO advanced model: " + ADVANCED_MODEL.toString());
-        return ADVANCED_MODEL;
+        // Use cute model for a friendly appearance
+        EtherealMind.LOGGER.debug("Loading COSMO cute model: " + CUTE_MODEL.toString());
+        return CUTE_MODEL;
     }
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use advanced texture with emission support
-        EtherealMind.LOGGER.debug("Loading COSMO advanced texture: " + ADVANCED_TEXTURE.toString());
-        return ADVANCED_TEXTURE;
+        // Use cute texture for friendly appearance
+        EtherealMind.LOGGER.debug("Loading COSMO cute texture: " + CUTE_TEXTURE.toString());
+        return CUTE_TEXTURE;
     }
     
     @Override
     public ResourceLocation getAnimationResource(CosmoEntity animatable) {
-        // Use advanced animations with 10+ animations
-        return ADVANCED_ANIMATION;
+        // Use cute animations
+        return CUTE_ANIMATION;
     }
     
     private boolean useDetailedModel() {

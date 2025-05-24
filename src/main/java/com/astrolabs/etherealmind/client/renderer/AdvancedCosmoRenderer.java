@@ -21,8 +21,8 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 
 public class AdvancedCosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced.png");
-    private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced_emissive.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced_cute.png");
+    private static final ResourceLocation EMISSIVE_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_advanced_cute.png");
     
     private final CosmoSpeechBubbleRenderer speechBubbleRenderer;
     private float time = 0;
