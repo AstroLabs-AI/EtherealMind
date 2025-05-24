@@ -1,6 +1,7 @@
 package com.astrolabs.etherealmind.common.entity;
 
 import com.astrolabs.etherealmind.common.ai.CosmoAI;
+import com.astrolabs.etherealmind.common.entity.abilities.CosmoAbilities;
 import com.astrolabs.etherealmind.common.network.NetworkHandler;
 import com.astrolabs.etherealmind.common.network.packets.OpenStoragePacket;
 import com.astrolabs.etherealmind.common.storage.DimensionalStorage;
@@ -39,6 +40,8 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final CosmoAI brain;
     private final DimensionalStorage storage;
+    private final CosmoLevel levelSystem;
+    private final CosmoAbilities abilities;
     
     // Player binding
     private UUID boundPlayerUUID;
@@ -49,6 +52,7 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     
     // State tracking
     private long playtime = 0;
+    private int interactionCount = 0;
     private float rotationSpeed = 2.0f;
     private int particleTimer = 0;
     
@@ -56,6 +60,8 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
         super(type, level);
         this.brain = new CosmoAI(this);
         this.storage = new DimensionalStorage(this);
+        this.levelSystem = new CosmoLevel();
+        this.abilities = new CosmoAbilities(this);
         this.setNoGravity(true);
         this.noPhysics = true;
     }
@@ -87,7 +93,15 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
             // Update AI every second
             if (playtime % 20 == 0) {
                 brain.update();
+                
+                // Gain XP over time (1 XP per minute)
+                if (playtime % 1200 == 0) {
+                    levelSystem.addExperience(1, boundPlayer);
+                }
             }
+            
+            // Update abilities
+            abilities.tick();
         }
         
         // Hovering animation
@@ -145,8 +159,24 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
                 bindToPlayer(player);
                 brain.onFirstMeeting(player);
             } else if (player.getUUID().equals(boundPlayerUUID)) {
-                // Open interaction menu
-                openInteractionMenu(player);
+                // Count interactions for XP
+                interactionCount++;
+                if (interactionCount % 10 == 0) {
+                    levelSystem.addExperience(5, player); // Bonus XP for interaction
+                }
+                
+                // Sneak + interact = set home position
+                if (player.isShiftKeyDown()) {
+                    abilities.setHomePos(player.blockPosition());
+                    player.displayClientMessage(
+                        net.minecraft.network.chat.Component.literal("✨ Home position set!")
+                            .withStyle(style -> style.withColor(0x00FFFF)), 
+                        true
+                    );
+                } else {
+                    // Open interaction menu
+                    openInteractionMenu(player);
+                }
             } else {
                 // Not bound to this player
                 brain.onStrangerInteraction(player);
@@ -182,8 +212,11 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
             compound.putUUID("BoundPlayer", boundPlayerUUID);
         }
         compound.putLong("Playtime", playtime);
+        compound.putInt("InteractionCount", interactionCount);
         compound.put("Brain", brain.save());
         compound.put("Storage", storage.save());
+        compound.put("Level", levelSystem.save(new CompoundTag()));
+        compound.put("Abilities", saveAbilities());
     }
     
     @Override
@@ -193,8 +226,11 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
             boundPlayerUUID = compound.getUUID("BoundPlayer");
         }
         playtime = compound.getLong("Playtime");
+        interactionCount = compound.getInt("InteractionCount");
         brain.load(compound.getCompound("Brain"));
         storage.load(compound.getCompound("Storage"));
+        levelSystem.load(compound.getCompound("Level"));
+        loadAbilities(compound.getCompound("Abilities"));
     }
     
     // GeckoLib animation
@@ -257,5 +293,45 @@ public class CosmoEntity extends PathfinderMob implements GeoEntity {
     
     public static CosmoEntity getCosmoForPlayer(Player player) {
         return COSMOS.get(player.getUUID());
+    }
+    
+    public int getLevel() {
+        return levelSystem.getLevel();
+    }
+    
+    public CosmoLevel getLevelSystem() {
+        return levelSystem;
+    }
+    
+    public CosmoAbilities getAbilities() {
+        return abilities;
+    }
+    
+    private CompoundTag saveAbilities() {
+        CompoundTag tag = new CompoundTag();
+        tag.putBoolean("ItemMagnet", abilities.isItemMagnetEnabled());
+        tag.putBoolean("AutoDeposit", abilities.isAutoDepositEnabled());
+        tag.putBoolean("HealingAura", abilities.isHealingAuraEnabled());
+        tag.putFloat("MagnetRange", abilities.getMagnetRange());
+        if (abilities.getHomePos() != null) {
+            tag.putInt("HomeX", abilities.getHomePos().getX());
+            tag.putInt("HomeY", abilities.getHomePos().getY());
+            tag.putInt("HomeZ", abilities.getHomePos().getZ());
+        }
+        return tag;
+    }
+    
+    private void loadAbilities(CompoundTag tag) {
+        abilities.setItemMagnetEnabled(tag.getBoolean("ItemMagnet"));
+        abilities.setAutoDepositEnabled(tag.getBoolean("AutoDeposit"));
+        abilities.setHealingAuraEnabled(tag.getBoolean("HealingAura"));
+        abilities.setMagnetRange(tag.getFloat("MagnetRange"));
+        if (tag.contains("HomeX")) {
+            abilities.setHomePos(new net.minecraft.core.BlockPos(
+                tag.getInt("HomeX"),
+                tag.getInt("HomeY"),
+                tag.getInt("HomeZ")
+            ));
+        }
     }
 }

@@ -74,6 +74,8 @@ public class EtherealMind {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Ethereal Mind: COSMO awakening on server...");
+        // Register commands
+        com.astrolabs.etherealmind.common.command.CosmoCommand.register(event.getServer().getCommands().getDispatcher());
     }
     
     public static ResourceLocation id(String path) {

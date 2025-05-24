@@ -93,13 +93,6 @@ public class DimensionalStorage {
         return categories.get("misc");
     }
     
-    public int getTotalPages() {
-        return pages.size();
-    }
-    
-    public int getTotalSlots() {
-        return pages.size() * SLOTS_PER_PAGE;
-    }
     
     public ItemStack getStackInSlot(int slot) {
         int pageIndex = slot / SLOTS_PER_PAGE;
@@ -205,6 +198,37 @@ public class DimensionalStorage {
         return !stack.isEmpty();
     }
     
+    public ItemStack insertItem(ItemStack stack, boolean simulate) {
+        ItemStack remaining = stack.copy();
+        
+        // Try to insert into existing stacks first
+        for (StoragePage page : pages) {
+            for (int i = 0; i < page.getItems().getSlots(); i++) {
+                remaining = page.getItems().insertItem(i, remaining, simulate);
+                if (remaining.isEmpty()) {
+                    return ItemStack.EMPTY;
+                }
+            }
+        }
+        
+        // Add new pages if needed and allowed
+        if (!remaining.isEmpty() && pages.size() < getMaxPages()) {
+            if (!simulate) {
+                pages.add(new StoragePage());
+            }
+            // Try inserting into the new page
+            StoragePage newPage = pages.get(pages.size() - 1);
+            for (int i = 0; i < newPage.getItems().getSlots(); i++) {
+                remaining = newPage.getItems().insertItem(i, remaining, simulate);
+                if (remaining.isEmpty()) {
+                    return ItemStack.EMPTY;
+                }
+            }
+        }
+        
+        return remaining;
+    }
+    
     public int getTotalItemCount() {
         int count = 0;
         for (StoragePage page : pages) {
@@ -216,6 +240,22 @@ public class DimensionalStorage {
             }
         }
         return count;
+    }
+    
+    public int getTotalSlots() {
+        return getMaxPages() * SLOTS_PER_PAGE;
+    }
+    
+    public int getTotalPages() {
+        return pages.size();
+    }
+    
+    public int getMaxPages() {
+        // Base pages + level bonus
+        int basePages = 8; // Start with 8 pages (432 slots)
+        float multiplier = cosmo.getLevelSystem().getStorageMultiplier();
+        int totalPages = (int)(basePages * multiplier);
+        return Math.min(MAX_PAGES, totalPages);
     }
     
     public static class StoragePage {

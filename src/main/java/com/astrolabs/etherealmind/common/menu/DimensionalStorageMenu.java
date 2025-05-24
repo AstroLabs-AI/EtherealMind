@@ -10,6 +10,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -209,7 +211,7 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
         private final int storageIndex;
         
         public StorageSlot(DimensionalStorage storage, int index, int x, int y) {
-            super(null, index, x, y);
+            super(new DummyContainer(), index, x, y);
             this.storage = storage;
             this.storageIndex = index;
         }
@@ -252,6 +254,51 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
         @Override
         public int getMaxStackSize() {
             return 64;
+        }
+    }
+    
+    // Dummy container to satisfy Slot's requirement for a non-null container
+    private static class DummyContainer implements net.minecraft.world.Container {
+        @Override
+        public int getContainerSize() {
+            return 0;
+        }
+        
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+        
+        @Override
+        public ItemStack getItem(int index) {
+            return ItemStack.EMPTY;
+        }
+        
+        @Override
+        public ItemStack removeItem(int index, int count) {
+            return ItemStack.EMPTY;
+        }
+        
+        @Override
+        public ItemStack removeItemNoUpdate(int index) {
+            return ItemStack.EMPTY;
+        }
+        
+        @Override
+        public void setItem(int index, ItemStack stack) {
+        }
+        
+        @Override
+        public void setChanged() {
+        }
+        
+        @Override
+        public boolean stillValid(Player player) {
+            return true;
+        }
+        
+        @Override
+        public void clearContent() {
         }
     }
 }
