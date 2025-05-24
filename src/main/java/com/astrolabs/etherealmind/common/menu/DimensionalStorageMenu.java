@@ -1,5 +1,6 @@
 package com.astrolabs.etherealmind.common.menu;
 
+import com.astrolabs.etherealmind.common.entity.CosmoEntity;
 import com.astrolabs.etherealmind.common.registry.MenuRegistry;
 import com.astrolabs.etherealmind.common.storage.DimensionalStorage;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +15,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class DimensionalStorageMenu extends AbstractContainerMenu {
-    private final DimensionalStorage storage;
+    private DimensionalStorage storage;
     private final Player player;
     private int currentPage = 0;
     
@@ -34,9 +35,21 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
     public DimensionalStorageMenu(int containerId, Inventory playerInventory, FriendlyByteBuf data) {
         super(MenuRegistry.DIMENSIONAL_STORAGE_MENU.get(), containerId);
         this.player = playerInventory.player;
-        this.storage = null; // Will be synced from server
         
-        // Add player inventory slots (storage slots will be added when synced)
+        // Read entity ID from buffer
+        int entityId = data.readVarInt();
+        if (player.level().getEntity(entityId) instanceof CosmoEntity cosmo) {
+            this.storage = cosmo.getStorage();
+        } else {
+            // Create temporary storage for client
+            this.storage = null;
+        }
+        
+        // Add all slots
+        if (this.storage != null) {
+            addStorageSlots();
+            addQuickAccessSlots();
+        }
         addPlayerInventory(playerInventory);
     }
     
@@ -178,7 +191,16 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
     
     @Override
     public boolean stillValid(Player player) {
-        return this.player == player;
+        return this.player == player && storage != null;
+    }
+    
+    public void setStorage(DimensionalStorage storage) {
+        this.storage = storage;
+        if (storage != null && this.slots.stream().noneMatch(slot -> slot instanceof StorageSlot)) {
+            // Add storage slots if they haven't been added yet
+            addStorageSlots();
+            addQuickAccessSlots();
+        }
     }
     
     // Custom slot for storage

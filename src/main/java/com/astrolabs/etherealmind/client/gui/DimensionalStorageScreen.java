@@ -134,14 +134,20 @@ public class DimensionalStorageScreen extends AbstractContainerScreen<Dimensiona
         this.renderTooltip(graphics, mouseX, mouseY);
         
         // Render page indicator
-        String pageText = String.format("Page %d/%d", menu.getCurrentPage() + 1, menu.getStorage().getTotalPages());
-        graphics.drawString(this.font, pageText, leftPos + imageWidth / 2 - font.width(pageText) / 2, topPos + 150, 0xFFFFFF, false);
-        
-        // Render storage info
-        int totalItems = menu.getStorage().getTotalItemCount();
-        int maxItems = menu.getStorage().getTotalSlots();
-        String storageText = String.format("Storage: %d/%d", totalItems, maxItems);
-        graphics.drawString(this.font, storageText, leftPos + 135, topPos + 12, 0xAAAAAA, false);
+        if (menu.getStorage() != null) {
+            String pageText = String.format("Page %d/%d", menu.getCurrentPage() + 1, menu.getStorage().getTotalPages());
+            graphics.drawString(this.font, pageText, leftPos + imageWidth / 2 - font.width(pageText) / 2, topPos + 150, 0xFFFFFF, false);
+            
+            // Render storage info
+            int totalItems = menu.getStorage().getTotalItemCount();
+            int maxItems = menu.getStorage().getTotalSlots();
+            String storageText = String.format("Storage: %d/%d", totalItems, maxItems);
+            graphics.drawString(this.font, storageText, leftPos + 135, topPos + 12, 0xAAAAAA, false);
+        } else {
+            // Show loading text if storage not synced yet
+            String loadingText = "Loading...";
+            graphics.drawString(this.font, loadingText, leftPos + imageWidth / 2 - font.width(loadingText) / 2, topPos + 150, 0xFFFFFF, false);
+        }
         
         // Render category indicator
         graphics.drawString(this.font, "Category: " + currentCategory, leftPos + imageWidth - 120, topPos + 12, 0xAAAAAA, false);
