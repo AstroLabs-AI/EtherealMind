@@ -24,17 +24,3 @@ jobs:
     
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
-    
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: mod-jar
-        path: build/libs/*.jar
-        retention-days: 7
-    
-    - name: Upload build reports
-      if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-reports
-        path: build/reports/
