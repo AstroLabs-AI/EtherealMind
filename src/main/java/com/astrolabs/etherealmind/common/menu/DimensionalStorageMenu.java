@@ -19,6 +19,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class DimensionalStorageMenu extends AbstractContainerMenu {
     private DimensionalStorage storage;
     private final Player player;
+    private CosmoEntity cosmo;
     private int currentPage = 0;
     
     // Storage layout constants
@@ -40,11 +41,13 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
         
         // Read entity ID from buffer
         int entityId = data.readVarInt();
-        if (player.level().getEntity(entityId) instanceof CosmoEntity cosmo) {
-            this.storage = cosmo.getStorage();
+        if (player.level().getEntity(entityId) instanceof CosmoEntity entity) {
+            this.cosmo = entity;
+            this.storage = entity.getStorage();
         } else {
             // Create temporary storage for client
             this.storage = null;
+            this.cosmo = null;
         }
         
         // Add all slots
@@ -60,6 +63,7 @@ public class DimensionalStorageMenu extends AbstractContainerMenu {
         super(MenuRegistry.DIMENSIONAL_STORAGE_MENU.get(), containerId);
         this.storage = storage;
         this.player = playerInventory.player;
+        this.cosmo = storage.getOwner();
         
         // Add storage slots for current page
         addStorageSlots();

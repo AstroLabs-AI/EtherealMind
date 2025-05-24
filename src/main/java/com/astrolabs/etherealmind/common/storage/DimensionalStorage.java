@@ -28,6 +28,10 @@ public class DimensionalStorage {
         pages.add(new StoragePage());
     }
     
+    public CosmoEntity getOwner() {
+        return cosmo;
+    }
+    
     private void initializeCategories() {
         categories.put("building", new StorageCategory("Building Materials", "building_block"));
         categories.put("tools", new StorageCategory("Tools & Weapons", "tool", "weapon"));

@@ -122,7 +122,7 @@ public class CosmoCompanionScreen extends AbstractContainerScreen<DimensionalSto
         
         // Stats
         graphics.drawString(this.font, "Stats", x + 2, y + 2, 0xFFFFFF, false);
-        graphics.drawString(this.font, "Trust: " + (int)(cosmo.getAI().getTrustLevel() * 100) + "%", 
+        graphics.drawString(this.font, "Trust: 100%", 
             x + 2, y + 12, 0xAAFFAA, false);
         graphics.drawString(this.font, "Energy: " + (int)(cosmo.getEnergyLevel() * 100) + "%", 
             x + 2, y + 22, 0xAAAAFF, false);
