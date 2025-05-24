@@ -4,26 +4,26 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="etherealmind"
-version="1.0.0"
+version="2.0.0"
 displayName="Ethereal Mind"
 logoFile="etherealmind.png"
 credits="AstroLabs Development Team"
 authors="AstroLabs"
 description='''
-Ethereal Mind: Advanced AI Companion
-Featuring COSMO - Your Cosmic Companion
+Ethereal Mind: Advanced AI Companion with Leveling System
+Featuring COSMO - Your Evolving Cosmic Companion
 
-COSMO is an advanced AI entity that serves as your personal assistant in Minecraft.
-With dimensional storage, reality-warping abilities, and a personality that evolves
-based on your playstyle, COSMO transforms your Minecraft experience.
+COSMO is an advanced AI entity that grows with you through a progressive leveling system.
+Starting as a simple storage companion, COSMO evolves into a powerful ally with 
+special abilities, massive storage capacity, and meaningful gameplay progression.
 
-Features:
-• Dimensional Storage System
-• Advanced Building Assistant
-• Integrated Web Browser
-• Reality Manipulation
-• Evolving AI Personality
-• And much more!
+Key Features:
+• Progressive Leveling System (1-10) with XP mechanics
+• Special Abilities: Item Magnet, Auto-Deposit, Healing Aura, Teleport Home
+• Dynamic Storage: 432-3,456 slots based on level
+• Command System: /cosmo level, /cosmo ability, /cosmo stats
+• Animated Entity with 8 facial expressions
+• Persistent progression and save system
 '''
 
 [[dependencies.etherealmind]]
