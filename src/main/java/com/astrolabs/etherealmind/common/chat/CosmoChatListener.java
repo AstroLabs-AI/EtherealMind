@@ -1,6 +1,7 @@
 package com.astrolabs.etherealmind.common.chat;
 
 import com.astrolabs.etherealmind.common.entity.CosmoEntity;
+import com.astrolabs.etherealmind.common.ai.OpenAIIntegration;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -102,8 +103,41 @@ public class CosmoChatListener {
             return;
         }
         
-        // Otherwise, treat as behavior command
-        cosmo.getBehavior().processCommand(lowerMessage, player);
+        // Otherwise, treat as behavior command or AI conversation
+        if (!cosmo.getBehavior().processCommand(lowerMessage, player)) {
+            // If no behavior command matched, use AI for natural conversation
+            handleAIConversation(cosmo, player, message);
+        }
+    }
+    
+    private static void handleAIConversation(CosmoEntity cosmo, ServerPlayer player, String message) {
+        // Show thinking indicator
+        cosmo.showEmote("💭");
+        
+        // Get game context with COSMO's level
+        OpenAIIntegration.GameContext context = OpenAIIntegration.GameContext.fromPlayer(player, cosmo.getLevel());
+        
+        // Generate AI response asynchronously
+        OpenAIIntegration.generateResponse(player, message, context)
+                .thenAccept(response -> {
+                    // Run on server thread
+                    player.getServer().execute(() -> {
+                        sendCosmoMessage(player, response);
+                        cosmo.showSpeechBubble(response);
+                        
+                        // React based on response mood
+                        if (response.contains("!") || response.contains("✨") || response.contains("💫")) {
+                            cosmo.setMood("happy");
+                            cosmo.playHappySound();
+                        } else if (response.contains("?")) {
+                            cosmo.setMood("curious");
+                            cosmo.playCuriousSound();
+                        } else if (response.contains("⚠") || response.contains("danger")) {
+                            cosmo.setMood("alert");
+                            cosmo.playAlertSound();
+                        }
+                    });
+                });
     }
     
     private static boolean containsAny(String message, String[] triggers) {

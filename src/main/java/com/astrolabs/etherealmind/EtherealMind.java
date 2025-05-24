@@ -3,6 +3,7 @@ package com.astrolabs.etherealmind;
 import com.astrolabs.etherealmind.client.ClientProxy;
 import com.astrolabs.etherealmind.common.CommonProxy;
 import com.astrolabs.etherealmind.common.chat.CosmoChatListener;
+import com.astrolabs.etherealmind.common.config.EtherealMindConfig;
 import com.astrolabs.etherealmind.common.entity.CosmoEntity;
 import com.astrolabs.etherealmind.common.registry.*;
 import com.astrolabs.etherealmind.common.network.NetworkHandler;
@@ -12,7 +13,9 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -52,6 +55,9 @@ public class EtherealMind {
         // Register ourselves for server and other game events
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(CosmoChatListener.class);
+        
+        // Register configuration
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EtherealMindConfig.SPEC);
     }
     
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {

@@ -1,0 +1,74 @@
+# EtherealMind Configuration File
+# This file controls various features and settings for the COSMO companion
+
+[general]
+
+    # AI Integration Settings
+    [general.ai]
+        # OpenAI API Key for ChatGPT integration
+        # Get your API key from https://platform.openai.com/api-keys
+        # Leave empty to disable AI chat features and use smart fallback system
+        openaiApiKey = ""
+        
+        # Enable AI-powered natural language chat with COSMO
+        # When disabled or API key is missing, uses smart contextual fallback system
+        enableAIChat = true
+        
+        # OpenAI model to use
+        # Options: gpt-3.5-turbo, gpt-4, gpt-4-turbo-preview
+        # Note: gpt-4 models provide better responses but cost more
+        aiModel = "gpt-3.5-turbo"
+        
+        # Maximum number of messages to keep in conversation history
+        # Higher values provide better context but use more tokens
+        # Range: 5 ~ 100
+        maxConversationHistory = 20
+        
+        # API request timeout in seconds
+        # Increase if you experience timeouts
+        # Range: 10 ~ 120
+        apiTimeoutSeconds = 30
+        
+        # AI creativity/randomness (0.0 = focused, 1.0 = creative)
+        # Lower values make responses more predictable and factual
+        # Higher values make responses more varied and creative
+        # Range: 0.0 ~ 1.0
+        aiTemperature = 0.7
+        
+        # Maximum tokens per AI response
+        # Controls the length of COSMO's responses
+        # Range: 50 ~ 500
+        maxTokens = 150
+
+    # Feature Toggles
+    [general.features]
+        # Enable COSMO's dimensional storage abilities
+        # When disabled, COSMO cannot store or retrieve items
+        enableDimensionalStorage = true
+        
+        # Enable reality warping visual effects
+        # Includes shader effects and advanced particles
+        enableRealityWarping = true
+        
+        # Enable COSMO's combat assistance features
+        # When disabled, COSMO will not help in combat
+        enableCombatAssistant = true
+        
+        # Enable COSMO's resource gathering abilities
+        # When disabled, COSMO will not collect items or harvest crops
+        enableResourceGathering = true
+
+    # Performance Settings
+    [general.performance]
+        # Particle effect density (1-10, lower = less particles)
+        # Reduce this if you experience lag near COSMO
+        # Range: 1 ~ 10
+        particleDensity = 5
+        
+        # Enable custom shader effects
+        # Disable this on lower-end systems for better performance
+        enableShaders = true
+        
+        # Enable speech bubble animations
+        # Shows what COSMO is saying in a bubble above their head
+        enableSpeechBubbles = true

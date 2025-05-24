@@ -169,9 +169,9 @@ public class CosmoBehavior {
     }
     
     // Command processing
-    public void processCommand(String command, Player sender) {
+    public boolean processCommand(String command, Player sender) {
         if (!cosmo.getBoundPlayer().equals(sender)) {
-            return; // Only owner can command
+            return false; // Only owner can command
         }
         
         String lowerCommand = command.toLowerCase();
@@ -184,18 +184,21 @@ public class CosmoBehavior {
             cosmo.playAcknowledgeSound();
             cosmo.showEmote("❤️");
             showFeedback("Following you! " + BehaviorState.FOLLOWING.getIcon());
+            return true;
             
         } else if (lowerCommand.contains("stay") || lowerCommand.contains("wait")) {
             setState(BehaviorState.STAYING);
             cosmo.playAcknowledgeSound();
             cosmo.showEmote("✋");
             showFeedback("Staying here! " + BehaviorState.STAYING.getIcon());
+            return true;
             
         } else if (lowerCommand.contains("come") || lowerCommand.contains("here")) {
             setState(BehaviorState.COMING);
             cosmo.playAcknowledgeSound();
             cosmo.showEmote("🏃");
             showFeedback("Coming! " + BehaviorState.COMING.getIcon());
+            return true;
             
         } else if (lowerCommand.contains("guard") || lowerCommand.contains("protect")) {
             setState(BehaviorState.GUARDING);
@@ -203,6 +206,7 @@ public class CosmoBehavior {
             cosmo.playAcknowledgeSound();
             cosmo.showEmote("🛡️");
             showFeedback("Guarding this area! " + BehaviorState.GUARDING.getIcon());
+            return true;
             
         } else if (lowerCommand.contains("patrol")) {
             setState(BehaviorState.PATROLLING);
@@ -223,12 +227,11 @@ public class CosmoBehavior {
             cosmo.playAcknowledgeSound();
             cosmo.showEmote("🔄");
             showFeedback("Patrolling area (radius: " + patrolRadius + ")! " + BehaviorState.PATROLLING.getIcon());
+            return true;
             
         } else {
-            // Unknown command
-            cosmo.playConfusedSound();
-            cosmo.showEmote("❓");
-            showFeedback("I don't understand... ?");
+            // Unknown command - return false so AI can handle it
+            return false;
         }
     }
     
