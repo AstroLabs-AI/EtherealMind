@@ -1,0 +1,43 @@
+{
+  "cosmo_ambient": {
+    "subtitle": "sound.etherealmind.cosmo_ambient",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/ambient1",
+        "stream": false
+      },
+      {
+        "name": "etherealmind:entity/cosmo/ambient2",
+        "stream": false
+      }
+    ]
+  },
+  "cosmo_happy": {
+    "subtitle": "sound.etherealmind.cosmo_happy",
+    "sounds": [
+      {
+        "name": "etherealmind:entity/cosmo/happy",
+        "stream": false
+      }
+    ]
+  },
+  "storage_open": {
+    "subtitle": "sound.etherealmind.storage_open",
+    "sounds": [
+      {
+        "name": "etherealmind:misc/storage_open",
+        "stream": false
+      }
+    ]
+  },
+  "reality_warp": {
+    "subtitle": "sound.etherealmind.reality_warp",
+    "sounds": [
+      {
+        "name": "etherealmind:misc/reality_warp",
+        "stream": false,
+        "volume": 0.8
+      }
+    ]
+  }
+}

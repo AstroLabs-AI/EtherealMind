@@ -1,0 +1,99 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.cosmo",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "core",
+					"pivot": [0, 16, 0],
+					"cubes": [
+						{
+							"origin": [-8, 8, -8],
+							"size": [16, 16, 16],
+							"uv": {
+								"north": {"uv": [16, 16], "uv_size": [16, 16]},
+								"east": {"uv": [0, 16], "uv_size": [16, 16]},
+								"south": {"uv": [48, 16], "uv_size": [16, 16]},
+								"west": {"uv": [32, 16], "uv_size": [16, 16]},
+								"up": {"uv": [16, 0], "uv_size": [16, 16]},
+								"down": {"uv": [32, 0], "uv_size": [16, 16]}
+							}
+						}
+					]
+				},
+				{
+					"name": "inner_core",
+					"parent": "core",
+					"pivot": [0, 16, 0],
+					"cubes": [
+						{
+							"origin": [-6, 10, -6],
+							"size": [12, 12, 12],
+							"uv": {
+								"north": {"uv": [12, 44], "uv_size": [12, 12]},
+								"east": {"uv": [0, 44], "uv_size": [12, 12]},
+								"south": {"uv": [36, 44], "uv_size": [12, 12]},
+								"west": {"uv": [24, 44], "uv_size": [12, 12]},
+								"up": {"uv": [12, 32], "uv_size": [12, 12]},
+								"down": {"uv": [24, 32], "uv_size": [12, 12]}
+							}
+						}
+					]
+				},
+				{
+					"name": "orbit_ring_1",
+					"parent": "core",
+					"pivot": [0, 16, 0],
+					"rotation": [0, 0, 45],
+					"cubes": [
+						{
+							"origin": [-12, 15.5, -12],
+							"size": [24, 1, 24],
+							"uv": {
+								"north": {"uv": [24, 57], "uv_size": [24, 1]},
+								"east": {"uv": [0, 57], "uv_size": [24, 1]},
+								"south": {"uv": [72, 57], "uv_size": [24, 1]},
+								"west": {"uv": [48, 57], "uv_size": [24, 1]},
+								"up": {"uv": [24, 32], "uv_size": [24, 24]},
+								"down": {"uv": [48, 32], "uv_size": [24, 24]}
+							}
+						}
+					]
+				},
+				{
+					"name": "orbit_ring_2",
+					"parent": "core",
+					"pivot": [0, 16, 0],
+					"rotation": [45, 0, 0],
+					"cubes": [
+						{
+							"origin": [-12, 15.5, -12],
+							"size": [24, 1, 24],
+							"uv": {
+								"north": {"uv": [24, 57], "uv_size": [24, 1]},
+								"east": {"uv": [0, 57], "uv_size": [24, 1]},
+								"south": {"uv": [72, 57], "uv_size": [24, 1]},
+								"west": {"uv": [48, 57], "uv_size": [24, 1]},
+								"up": {"uv": [24, 32], "uv_size": [24, 24]},
+								"down": {"uv": [48, 32], "uv_size": [24, 24]}
+							}
+						}
+					]
+				},
+				{
+					"name": "particles",
+					"parent": "core",
+					"pivot": [0, 16, 0]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,124 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.24', changing: true
+    }
+}
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '6.0.24' apply false
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+group = 'com.astrolabs'
+version = '1.0.0'
+
+java {
+    archivesBaseName = 'etherealmind'
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'etherealmind'
+            
+            mods {
+                etherealmind {
+                    source sourceSets.main
+                }
+            }
+        }
+        
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'etherealmind'
+            
+            mods {
+                etherealmind {
+                    source sourceSets.main
+                }
+            }
+        }
+        
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            
+            args '--mod', 'etherealmind', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            
+            mods {
+                etherealmind {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven { url 'https://maven.blamejared.com' }
+    maven { url 'https://maven.terraformersmc.com/' }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+    
+    // GeckoLib for advanced animations
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.4')
+    
+    // JEI for storage integration
+    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.27"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.2.0.27"))
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "etherealmind",
+                "Specification-Vendor"    : "astrolabs",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "astrolabs",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

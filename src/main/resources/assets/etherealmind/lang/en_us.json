@@ -1,0 +1,23 @@
+{
+  "item.etherealmind.cosmo_spawn_egg": "COSMO Spawn Egg",
+  
+  "entity.etherealmind.cosmo": "COSMO",
+  
+  "gui.etherealmind.dimensional_storage": "Dimensional Storage",
+  "gui.etherealmind.search": "Search...",
+  
+  "chat.etherealmind.cosmo.spawn": "COSMO has materialized from the ethereal plane",
+  "chat.etherealmind.cosmo.happy": "COSMO radiates contentment",
+  "chat.etherealmind.cosmo.curious": "COSMO tilts inquisitively",
+  "chat.etherealmind.cosmo.playful": "COSMO pulses with playful energy",
+  "chat.etherealmind.cosmo.protective": "COSMO's aura intensifies protectively",
+  
+  "effect.etherealmind.reality_distortion": "Reality Distortion",
+  
+  "sound.etherealmind.cosmo_ambient": "COSMO Ambient",
+  "sound.etherealmind.cosmo_happy": "COSMO Happy",
+  "sound.etherealmind.storage_open": "Storage Opens",
+  "sound.etherealmind.reality_warp": "Reality Warps",
+  
+  "itemGroup.etherealmind": "EtherealMind"
+}

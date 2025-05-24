@@ -1,0 +1,48 @@
+{
+    "targets": [
+        "swap"
+    ],
+    "passes": [
+        {
+            "name": "etherealmind:ethereal_blur",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 1.0, 0.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 5.0 ]
+                }
+            ]
+        },
+        {
+            "name": "etherealmind:ethereal_blur",
+            "intarget": "swap",
+            "outtarget": "minecraft:main",
+            "uniforms": [
+                {
+                    "name": "BlurDir",
+                    "values": [ 0.0, 1.0 ]
+                },
+                {
+                    "name": "Radius",
+                    "values": [ 5.0 ]
+                }
+            ]
+        },
+        {
+            "name": "etherealmind:ethereal_overlay",
+            "intarget": "minecraft:main",
+            "outtarget": "minecraft:main",
+            "uniforms": [
+                {
+                    "name": "Intensity",
+                    "values": [ 0.5 ]
+                }
+            ]
+        }
+    ]
+}

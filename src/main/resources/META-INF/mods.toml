@@ -1,0 +1,41 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="etherealmind"
+version="1.0.0"
+displayName="Ethereal Mind"
+logoFile="etherealmind.png"
+credits="AstroLabs Development Team"
+authors="AstroLabs"
+description='''
+Ethereal Mind: Advanced AI Companion
+Featuring COSMO - Your Cosmic Companion
+
+COSMO is an advanced AI entity that serves as your personal assistant in Minecraft.
+With dimensional storage, reality-warping abilities, and a personality that evolves
+based on your playstyle, COSMO transforms your Minecraft experience.
+
+Features:
+• Dimensional Storage System
+• Advanced Building Assistant
+• Integrated Web Browser
+• Reality Manipulation
+• Evolving AI Personality
+• And much more!
+'''
+
+[[dependencies.etherealmind]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.etherealmind]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
