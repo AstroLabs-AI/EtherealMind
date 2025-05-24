@@ -14,12 +14,19 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
+    private static final ResourceLocation ANIMATED_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_animated.png");
     private final CosmoSpeechBubbleRenderer speechBubbleRenderer;
     
     public CosmoRenderer(EntityRendererProvider.Context context) {
         super(context, new CosmoModel());
         this.shadowRadius = 0.0f; // No shadow for ethereal being
         this.speechBubbleRenderer = new CosmoSpeechBubbleRenderer();
+    }
+    
+    @Override
+    public ResourceLocation getTextureLocation(CosmoEntity entity) {
+        // Use animated texture system
+        return CosmoAnimationController.getAnimatedTexture(entity, 0);
     }
     
     @Override
@@ -60,18 +67,81 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
                                    PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         
-        // Rotation animation
-        float rotation = (entity.tickCount + partialTick) * 2.0f;
+        // Event horizon ring effect with reality distortion
+        float time = entity.tickCount + partialTick;
+        float rotation = time * 2.0f;
+        float pulseScale = 1.0f + (float)Math.sin(time * 0.05f) * 0.1f;
+        
+        poseStack.scale(pulseScale, pulseScale, pulseScale);
         poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(rotation));
         
-        // TODO: Render event horizon ring
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE));
+        Matrix4f matrix = poseStack.last().pose();
+        
+        // Get mood colors
+        int[] colors = CosmoAnimationController.getParticleColors(entity);
+        float r = colors[0] / 255.0f;
+        float g = colors[1] / 255.0f;
+        float b = colors[2] / 255.0f;
+        
+        // Render distortion ring segments
+        int segments = 16;
+        float radius = 0.6f;
+        for (int i = 0; i < segments; i++) {
+            float angle = (float)(i * Math.PI * 2.0 / segments);
+            float nextAngle = (float)((i + 1) * Math.PI * 2.0 / segments);
+            
+            // Add wave distortion
+            float distortion = (float)Math.sin(time * 0.1f + angle * 3) * 0.1f;
+            float r1 = radius + distortion;
+            float r2 = radius + (float)Math.sin(time * 0.1f + nextAngle * 3) * 0.1f;
+            
+            float x1 = (float)Math.cos(angle) * r1;
+            float z1 = (float)Math.sin(angle) * r1;
+            float x2 = (float)Math.cos(nextAngle) * r2;
+            float z2 = (float)Math.sin(nextAngle) * r2;
+            
+            float alpha = 0.3f + (float)Math.sin(time * 0.1f + angle) * 0.2f;
+            
+            // Render quad
+            consumer.vertex(matrix, x1, -0.1f, z1).color(r, g, b, alpha).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 1, 0).endVertex();
+            consumer.vertex(matrix, x2, -0.1f, z2).color(r, g, b, alpha).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 1, 0).endVertex();
+            consumer.vertex(matrix, x2, 0.1f, z2).color(r, g, b, alpha * 0.5f).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 1, 0).endVertex();
+            consumer.vertex(matrix, x1, 0.1f, z1).color(r, g, b, alpha * 0.5f).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 1, 0).endVertex();
+        }
         
         poseStack.popPose();
     }
     
     private void renderVoidCenter(CosmoEntity entity, float partialTick, 
                                  PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        // TODO: Render void center with shader effects
+        // Void center with reality warping effect
+        float time = entity.tickCount + partialTick;
+        
+        poseStack.pushPose();
+        
+        // Pulsing void scale
+        float voidScale = 0.2f + (float)Math.sin(time * 0.03f) * 0.05f;
+        poseStack.scale(voidScale, voidScale, voidScale);
+        
+        // Counter-rotate for stability effect
+        poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-time));
+        poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(time * 0.7f));
+        
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.endPortal());
+        Matrix4f matrix = poseStack.last().pose();
+        
+        // Simple void cube with distortion
+        float size = 1.0f;
+        float warp = (float)Math.sin(time * 0.05f) * 0.1f;
+        
+        // Front face
+        consumer.vertex(matrix, -size - warp, -size, size).color(0.1f, 0.0f, 0.2f, 0.9f).uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 0, 1).endVertex();
+        consumer.vertex(matrix, size + warp, -size, size).color(0.1f, 0.0f, 0.2f, 0.9f).uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 0, 1).endVertex();
+        consumer.vertex(matrix, size, size + warp, size).color(0.0f, 0.0f, 0.1f, 0.9f).uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 0, 1).endVertex();
+        consumer.vertex(matrix, -size, size - warp, size).color(0.0f, 0.0f, 0.1f, 0.9f).uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(0, 0, 1).endVertex();
+        
+        poseStack.popPose();
     }
     
     private void renderParticles(CosmoEntity entity, float partialTick, 
@@ -79,14 +149,6 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         // Particle rendering handled by particle system
     }
     
-    @Override
-    public ResourceLocation getTextureLocation(CosmoEntity entity) {
-        // Debug log
-        if (entity.tickCount % 100 == 0) {
-            EtherealMind.LOGGER.debug("COSMO texture requested: " + TEXTURE.toString());
-        }
-        return TEXTURE;
-    }
     
     @Override
     public RenderType getRenderType(CosmoEntity animatable, ResourceLocation texture, 

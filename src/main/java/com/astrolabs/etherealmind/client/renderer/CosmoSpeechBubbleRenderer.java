@@ -19,24 +19,32 @@ public class CosmoSpeechBubbleRenderer {
     private static final int TEXT_COLOR = 0xFF000000; // Black text
     private static final float BUBBLE_SCALE = 0.02f;
     private static final int DISPLAY_TIME = 100; // 5 seconds
+    private static final float FADE_IN_TIME = 10f; // ticks
+    private static final float FADE_OUT_TIME = 20f; // ticks
+    private static final int CHARS_PER_TICK = 2; // typing speed
     
     private String currentMessage = "";
     private String currentEmote = "";
     private int displayTimer = 0;
+    private int animationTimer = 0;
+    private float lastScale = 0.0f;
     
     public void showMessage(String message) {
         this.currentMessage = message;
         this.displayTimer = DISPLAY_TIME;
+        this.animationTimer = 0;
     }
     
     public void showEmote(String emote) {
         this.currentEmote = emote;
         this.displayTimer = DISPLAY_TIME;
+        this.animationTimer = 0;
     }
     
     public void tick() {
         if (displayTimer > 0) {
             displayTimer--;
+            animationTimer++;
         }
     }
     
@@ -50,18 +58,47 @@ public class CosmoSpeechBubbleRenderer {
         
         poseStack.pushPose();
         
-        // Position above COSMO
-        poseStack.translate(0, cosmo.getBbHeight() + 0.5, 0);
+        // Calculate animation values
+        float fadeProgress = 1.0f;
+        float scaleProgress = 1.0f;
+        float typingProgress = 1.0f;
+        
+        // Fade in
+        if (animationTimer < FADE_IN_TIME) {
+            fadeProgress = animationTimer / FADE_IN_TIME;
+            scaleProgress = 0.8f + (0.2f * fadeProgress);
+        }
+        // Fade out
+        else if (displayTimer < FADE_OUT_TIME) {
+            fadeProgress = displayTimer / FADE_OUT_TIME;
+            scaleProgress = 1.0f - (0.2f * (1.0f - fadeProgress));
+        }
+        
+        // Typing animation
+        int maxChars = (animationTimer - (int)FADE_IN_TIME) * CHARS_PER_TICK;
+        typingProgress = Math.min(1.0f, (float)maxChars / currentMessage.length());
+        
+        // Smooth scale transitions
+        float targetScale = BUBBLE_SCALE * scaleProgress;
+        lastScale = lastScale + (targetScale - lastScale) * 0.3f;
+        
+        // Position above COSMO with bounce
+        float bounce = (float)Math.sin(animationTimer * 0.1) * 0.02f;
+        poseStack.translate(0, cosmo.getBbHeight() + 0.5 + bounce, 0);
         
         // Face the camera
         poseStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
-        poseStack.scale(-BUBBLE_SCALE, -BUBBLE_SCALE, BUBBLE_SCALE);
+        poseStack.scale(-lastScale, -lastScale, lastScale);
         
-        // Fade out effect
-        float alpha = Math.min(1.0f, displayTimer / 20.0f);
+        float alpha = fadeProgress;
         
         if (!currentMessage.isEmpty()) {
-            renderSpeechBubble(poseStack, buffer, font, currentMessage, alpha);
+            // Only show typed characters
+            int charsToShow = Math.max(0, Math.min(maxChars, currentMessage.length()));
+            String displayMessage = currentMessage.substring(0, charsToShow);
+            if (!displayMessage.isEmpty()) {
+                renderSpeechBubble(poseStack, buffer, font, displayMessage, alpha);
+            }
         }
         
         if (!currentEmote.isEmpty()) {

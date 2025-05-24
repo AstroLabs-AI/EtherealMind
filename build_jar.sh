@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "Building EtherealMind v3.0.0..."
+echo ""
+echo "Requirements: Java 17"
+echo "Current Java version:"
+java -version
+echo ""
+echo "If you have Java 17, run: ./gradlew build"
+echo "The JAR will be in: build/libs/etherealmind-3.0.0.jar"
+echo ""
+echo "To install Java 17 on Ubuntu/Debian:"
+echo "  sudo apt update"
+echo "  sudo apt install openjdk-17-jdk"
+echo ""
+echo "On macOS with Homebrew:"
+echo "  brew install openjdk@17"
+echo ""
+echo "On Windows:"
+echo "  Download from: https://adoptium.net/temurin/releases/?version=17"

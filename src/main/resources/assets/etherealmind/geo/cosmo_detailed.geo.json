@@ -1,0 +1,262 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.cosmo_detailed",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "root",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{
+							"comment": "Main body core",
+							"origin": [-8, 16, -8],
+							"size": [16, 16, 16],
+							"uv": {
+								"north": {"uv": [16, 16], "uv_size": [16, 16]},
+								"east": {"uv": [0, 16], "uv_size": [16, 16]},
+								"south": {"uv": [48, 16], "uv_size": [16, 16]},
+								"west": {"uv": [32, 16], "uv_size": [16, 16]},
+								"up": {"uv": [16, 0], "uv_size": [16, 16]},
+								"down": {"uv": [32, 0], "uv_size": [16, 16]}
+							}
+						}
+					]
+				},
+				{
+					"name": "outer_shell",
+					"parent": "body",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{
+							"comment": "Translucent outer shell",
+							"origin": [-10, 14, -10],
+							"size": [20, 20, 20],
+							"inflate": 0.5,
+							"uv": {
+								"north": {"uv": [20, 52], "uv_size": [20, 20]},
+								"east": {"uv": [0, 52], "uv_size": [20, 20]},
+								"south": {"uv": [60, 52], "uv_size": [20, 20]},
+								"west": {"uv": [40, 52], "uv_size": [20, 20]},
+								"up": {"uv": [20, 32], "uv_size": [20, 20]},
+								"down": {"uv": [40, 32], "uv_size": [20, 20]}
+							}
+						}
+					]
+				},
+				{
+					"name": "energy_core",
+					"parent": "body",
+					"pivot": [0, 24, 0],
+					"rotation": [0, 45, 0],
+					"cubes": [
+						{
+							"comment": "Inner energy core",
+							"origin": [-4, 20, -4],
+							"size": [8, 8, 8],
+							"uv": {
+								"north": {"uv": [8, 80], "uv_size": [8, 8]},
+								"east": {"uv": [0, 80], "uv_size": [8, 8]},
+								"south": {"uv": [24, 80], "uv_size": [8, 8]},
+								"west": {"uv": [16, 80], "uv_size": [8, 8]},
+								"up": {"uv": [8, 72], "uv_size": [8, 8]},
+								"down": {"uv": [16, 72], "uv_size": [8, 8]}
+							}
+						}
+					]
+				},
+				{
+					"name": "ring1",
+					"parent": "body",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{
+							"comment": "Orbital ring 1",
+							"origin": [-12, 23, -1],
+							"size": [24, 2, 2],
+							"uv": {
+								"north": {"uv": [2, 94], "uv_size": [24, 2]},
+								"east": {"uv": [0, 94], "uv_size": [2, 2]},
+								"south": {"uv": [28, 94], "uv_size": [24, 2]},
+								"west": {"uv": [26, 94], "uv_size": [2, 2]},
+								"up": {"uv": [2, 92], "uv_size": [24, 2]},
+								"down": {"uv": [26, 92], "uv_size": [24, 2]}
+							}
+						},
+						{
+							"origin": [-1, 23, -12],
+							"size": [2, 2, 24],
+							"uv": {
+								"north": {"uv": [26, 94], "uv_size": [2, 2]},
+								"east": {"uv": [2, 94], "uv_size": [24, 2]},
+								"south": {"uv": [0, 94], "uv_size": [2, 2]},
+								"west": {"uv": [28, 94], "uv_size": [24, 2]},
+								"up": {"uv": [2, 92], "uv_size": [24, 2], "rotation": 90},
+								"down": {"uv": [26, 92], "uv_size": [24, 2], "rotation": 90}
+							}
+						}
+					]
+				},
+				{
+					"name": "ring2",
+					"parent": "body",
+					"pivot": [0, 24, 0],
+					"rotation": [45, 0, 45],
+					"cubes": [
+						{
+							"comment": "Orbital ring 2",
+							"origin": [-12, 23, -1],
+							"size": [24, 2, 2],
+							"uv": {
+								"north": {"uv": [2, 98], "uv_size": [24, 2]},
+								"east": {"uv": [0, 98], "uv_size": [2, 2]},
+								"south": {"uv": [28, 98], "uv_size": [24, 2]},
+								"west": {"uv": [26, 98], "uv_size": [2, 2]},
+								"up": {"uv": [2, 96], "uv_size": [24, 2]},
+								"down": {"uv": [26, 96], "uv_size": [24, 2]}
+							}
+						}
+					]
+				},
+				{
+					"name": "eye_left",
+					"parent": "body",
+					"pivot": [-4, 26, -8],
+					"cubes": [
+						{
+							"comment": "Left eye",
+							"origin": [-6, 24, -9],
+							"size": [4, 4, 2],
+							"uv": {
+								"north": {"uv": [34, 80], "uv_size": [4, 4]},
+								"east": {"uv": [32, 80], "uv_size": [2, 4]},
+								"south": {"uv": [40, 80], "uv_size": [4, 4]},
+								"west": {"uv": [38, 80], "uv_size": [2, 4]},
+								"up": {"uv": [34, 78], "uv_size": [4, 2]},
+								"down": {"uv": [38, 78], "uv_size": [4, 2]}
+							}
+						}
+					]
+				},
+				{
+					"name": "eye_right",
+					"parent": "body",
+					"pivot": [4, 26, -8],
+					"cubes": [
+						{
+							"comment": "Right eye",
+							"origin": [2, 24, -9],
+							"size": [4, 4, 2],
+							"uv": {
+								"north": {"uv": [46, 80], "uv_size": [4, 4]},
+								"east": {"uv": [44, 80], "uv_size": [2, 4]},
+								"south": {"uv": [52, 80], "uv_size": [4, 4]},
+								"west": {"uv": [50, 80], "uv_size": [2, 4]},
+								"up": {"uv": [46, 78], "uv_size": [4, 2]},
+								"down": {"uv": [50, 78], "uv_size": [4, 2]}
+							}
+						}
+					]
+				},
+				{
+					"name": "antenna_left",
+					"parent": "body",
+					"pivot": [-4, 32, 0],
+					"cubes": [
+						{
+							"comment": "Left antenna base",
+							"origin": [-5, 32, -1],
+							"size": [2, 4, 2],
+							"uv": {
+								"north": {"uv": [58, 80], "uv_size": [2, 4]},
+								"east": {"uv": [56, 80], "uv_size": [2, 4]},
+								"south": {"uv": [62, 80], "uv_size": [2, 4]},
+								"west": {"uv": [60, 80], "uv_size": [2, 4]},
+								"up": {"uv": [58, 78], "uv_size": [2, 2]},
+								"down": {"uv": [60, 78], "uv_size": [2, 2]}
+							}
+						},
+						{
+							"comment": "Left antenna tip",
+							"origin": [-6, 36, -2],
+							"size": [4, 4, 4],
+							"uv": {
+								"north": {"uv": [68, 80], "uv_size": [4, 4]},
+								"east": {"uv": [64, 80], "uv_size": [4, 4]},
+								"south": {"uv": [76, 80], "uv_size": [4, 4]},
+								"west": {"uv": [72, 80], "uv_size": [4, 4]},
+								"up": {"uv": [68, 76], "uv_size": [4, 4]},
+								"down": {"uv": [72, 76], "uv_size": [4, 4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "antenna_right",
+					"parent": "body",
+					"pivot": [4, 32, 0],
+					"cubes": [
+						{
+							"comment": "Right antenna base",
+							"origin": [3, 32, -1],
+							"size": [2, 4, 2],
+							"uv": {
+								"north": {"uv": [82, 80], "uv_size": [2, 4]},
+								"east": {"uv": [80, 80], "uv_size": [2, 4]},
+								"south": {"uv": [86, 80], "uv_size": [2, 4]},
+								"west": {"uv": [84, 80], "uv_size": [2, 4]},
+								"up": {"uv": [82, 78], "uv_size": [2, 2]},
+								"down": {"uv": [84, 78], "uv_size": [2, 2]}
+							}
+						},
+						{
+							"comment": "Right antenna tip",
+							"origin": [2, 36, -2],
+							"size": [4, 4, 4],
+							"uv": {
+								"north": {"uv": [92, 80], "uv_size": [4, 4]},
+								"east": {"uv": [88, 80], "uv_size": [4, 4]},
+								"south": {"uv": [100, 80], "uv_size": [4, 4]},
+								"west": {"uv": [96, 80], "uv_size": [4, 4]},
+								"up": {"uv": [92, 76], "uv_size": [4, 4]},
+								"down": {"uv": [96, 76], "uv_size": [4, 4]}
+							}
+						}
+					]
+				},
+				{
+					"name": "particle_emitter1",
+					"parent": "body",
+					"pivot": [0, 16, 0]
+				},
+				{
+					"name": "particle_emitter2",
+					"parent": "body",
+					"pivot": [0, 32, 0]
+				},
+				{
+					"name": "particle_emitter3",
+					"parent": "body",
+					"pivot": [0, 24, -10]
+				},
+				{
+					"name": "particle_emitter4",
+					"parent": "body",
+					"pivot": [0, 24, 10]
+				}
+			]
+		}
+	]
+}

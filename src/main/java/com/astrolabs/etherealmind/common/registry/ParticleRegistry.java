@@ -30,6 +30,22 @@ public class ParticleRegistry {
     public static final RegistryObject<SimpleParticleType> REALITY_RIPPLE = PARTICLES.register("reality_ripple",
             () -> new SimpleParticleType(false));
     
+    // Mood-specific particles
+    public static final RegistryObject<SimpleParticleType> HAPPY_PARTICLE = PARTICLES.register("happy_particle",
+            () -> new SimpleParticleType(false));
+    
+    public static final RegistryObject<SimpleParticleType> CURIOUS_PARTICLE = PARTICLES.register("curious_particle",
+            () -> new SimpleParticleType(false));
+    
+    public static final RegistryObject<SimpleParticleType> ALERT_PARTICLE = PARTICLES.register("alert_particle",
+            () -> new SimpleParticleType(false));
+    
+    public static final RegistryObject<SimpleParticleType> TIRED_PARTICLE = PARTICLES.register("tired_particle",
+            () -> new SimpleParticleType(false));
+    
+    public static final RegistryObject<SimpleParticleType> EXCITED_PARTICLE = PARTICLES.register("excited_particle",
+            () -> new SimpleParticleType(false));
+    
     public static void register(IEventBus eventBus) {
         PARTICLES.register(eventBus);
     }
