@@ -2,10 +2,12 @@ package com.astrolabs.etherealmind;
 
 import com.astrolabs.etherealmind.client.ClientProxy;
 import com.astrolabs.etherealmind.common.CommonProxy;
+import com.astrolabs.etherealmind.common.entity.CosmoEntity;
 import com.astrolabs.etherealmind.common.registry.*;
 import com.astrolabs.etherealmind.common.network.NetworkHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,9 +45,14 @@ public class EtherealMind {
         // Register setup events
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::registerEntityAttributes);
         
         // Register ourselves for server and other game events
         MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    private void registerEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(EntityRegistry.COSMO.get(), CosmoEntity.createAttributes().build());
     }
     
     private void commonSetup(final FMLCommonSetupEvent event) {
