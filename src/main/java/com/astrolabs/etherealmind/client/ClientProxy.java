@@ -21,8 +21,8 @@ public class ClientProxy extends CommonProxy {
     
     @Override
     public void clientInit() {
-        // Register entity renderers - use advanced renderer for full 3D experience
-        EntityRenderers.register(EntityRegistry.COSMO.get(), AdvancedCosmoRenderer::new);
+        // Register entity renderers - use standard renderer for stability
+        EntityRenderers.register(EntityRegistry.COSMO.get(), com.astrolabs.etherealmind.client.renderer.CosmoRenderer::new);
         
         // Register menu screens - use new companion screen
         MenuScreens.register(MenuRegistry.DIMENSIONAL_STORAGE_MENU.get(), CosmoCompanionScreen::new);

@@ -26,21 +26,22 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use cute model for a friendly appearance
-        EtherealMind.LOGGER.debug("Loading COSMO cute model: " + CUTE_MODEL.toString());
+        // Use cute model that we know works
+        EtherealMind.LOGGER.info("Loading COSMO model: " + CUTE_MODEL.toString());
         return CUTE_MODEL;
     }
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use cute texture for friendly appearance
-        EtherealMind.LOGGER.debug("Loading COSMO cute texture: " + CUTE_TEXTURE.toString());
-        return CUTE_TEXTURE;
+        // Use the properly sized cute texture
+        ResourceLocation properTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_cute_proper.png");
+        EtherealMind.LOGGER.info("Loading COSMO texture: " + properTexture.toString());
+        return properTexture;
     }
     
     @Override
     public ResourceLocation getAnimationResource(CosmoEntity animatable) {
-        // Use cute animations
+        // Use cute animations that match the model
         return CUTE_ANIMATION;
     }
     
