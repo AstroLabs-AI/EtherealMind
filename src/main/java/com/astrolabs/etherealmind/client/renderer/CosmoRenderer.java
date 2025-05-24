@@ -16,7 +16,7 @@ import org.joml.Matrix4f;
 import javax.annotation.Nullable;
 
 public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_cute.png");
     private static final ResourceLocation ANIMATED_TEXTURE = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_animated.png");
     private final CosmoSpeechBubbleRenderer speechBubbleRenderer;
     
@@ -29,8 +29,8 @@ public class CosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     
     @Override
     public ResourceLocation getTextureLocation(CosmoEntity entity) {
-        // Use the main texture directly to ensure it loads properly
-        return TEXTURE;
+        // Delegate to the model to get the correct texture
+        return this.getGeoModel().getTextureResource(entity);
     }
     
     @Override
