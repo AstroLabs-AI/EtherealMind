@@ -39,7 +39,7 @@ public class ResourceGatherer {
     
     // Gathering ranges
     private static final double ITEM_COLLECT_RANGE = 8.0;
-    private static final double CROP_HARVEST_RANGE = 6.0;
+    private static final int CROP_HARVEST_RANGE = 6;
     private static final double XP_COLLECT_RANGE = 10.0;
     
     // Statistics

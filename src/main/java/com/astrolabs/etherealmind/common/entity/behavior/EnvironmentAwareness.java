@@ -197,7 +197,7 @@ public class EnvironmentAwareness {
         // Check if hostile mobs are near the owner
         if (nearbyHostiles != null) {
             for (LivingEntity hostile : nearbyHostiles) {
-                if (hostile.getTarget() == owner) {
+                if (hostile instanceof net.minecraft.world.entity.Mob mob && mob.getTarget() == owner) {
                     return true;
                 }
             }

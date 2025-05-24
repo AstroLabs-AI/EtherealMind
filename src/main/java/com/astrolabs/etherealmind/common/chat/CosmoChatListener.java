@@ -132,7 +132,7 @@ public class CosmoChatListener {
     
     private static void respondStatus(CosmoEntity cosmo, ServerPlayer player) {
         int level = cosmo.getLevel();
-        String mood = cosmo.getCosmoAI().getCurrentMood();
+        String mood = cosmo.getMood();
         String behavior = cosmo.getBehavior().getStateDisplay();
         
         String response = String.format(

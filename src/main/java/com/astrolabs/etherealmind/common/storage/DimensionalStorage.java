@@ -198,6 +198,53 @@ public class DimensionalStorage {
         return !stack.isEmpty();
     }
     
+    // Helper methods for page-based access
+    public ItemStack getItem(int pageIndex, int slotIndex) {
+        if (pageIndex >= 0 && pageIndex < pages.size() && slotIndex >= 0 && slotIndex < SLOTS_PER_PAGE) {
+            return pages.get(pageIndex).getItems().getStackInSlot(slotIndex);
+        }
+        return ItemStack.EMPTY;
+    }
+    
+    public void setItem(int pageIndex, int slotIndex, ItemStack stack) {
+        if (pageIndex >= 0 && pageIndex < pages.size() && slotIndex >= 0 && slotIndex < SLOTS_PER_PAGE) {
+            pages.get(pageIndex).getItems().setStackInSlot(slotIndex, stack);
+        }
+    }
+    
+    public int getTotalPages() {
+        return pages.size();
+    }
+    
+    // Extract item by type
+    public ItemStack extractItem(ItemStack toExtract, int amount, boolean simulate) {
+        ItemStack extracted = ItemStack.EMPTY;
+        int remaining = amount;
+        
+        for (StoragePage page : pages) {
+            ItemStackHandler items = page.getItems();
+            for (int slot = 0; slot < items.getSlots(); slot++) {
+                ItemStack stack = items.getStackInSlot(slot);
+                if (ItemStack.isSameItemSameTags(stack, toExtract)) {
+                    int toExtractFromSlot = Math.min(remaining, stack.getCount());
+                    ItemStack extractedFromSlot = items.extractItem(slot, toExtractFromSlot, simulate);
+                    
+                    if (extracted.isEmpty()) {
+                        extracted = extractedFromSlot.copy();
+                    } else {
+                        extracted.grow(extractedFromSlot.getCount());
+                    }
+                    
+                    remaining -= extractedFromSlot.getCount();
+                    if (remaining <= 0) break;
+                }
+            }
+            if (remaining <= 0) break;
+        }
+        
+        return extracted;
+    }
+    
     public ItemStack insertItem(ItemStack stack, boolean simulate) {
         ItemStack remaining = stack.copy();
         
@@ -244,10 +291,6 @@ public class DimensionalStorage {
     
     public int getTotalSlots() {
         return getMaxPages() * SLOTS_PER_PAGE;
-    }
-    
-    public int getTotalPages() {
-        return pages.size();
     }
     
     public int getMaxPages() {
