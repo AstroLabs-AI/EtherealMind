@@ -231,7 +231,14 @@ public class OpenAIIntegration {
             Level level = player.level();
             
             context.position = player.position();
-            context.biome = level.getBiome(player.blockPosition()).value().location().getPath();
+            context.biome = level.getBiome(player.blockPosition()).value().toString();
+            // Extract just the biome name from the full string
+            if (context.biome.contains(":")) {
+                context.biome = context.biome.substring(context.biome.lastIndexOf(":") + 1);
+            }
+            if (context.biome.contains("[")) {
+                context.biome = context.biome.substring(0, context.biome.indexOf("["));
+            }
             context.playerHealth = (int)((player.getHealth() / player.getMaxHealth()) * 100);
             context.cosmoLevel = cosmoLevel;
             

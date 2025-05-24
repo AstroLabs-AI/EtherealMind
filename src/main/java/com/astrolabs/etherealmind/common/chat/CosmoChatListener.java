@@ -131,10 +131,10 @@ public class CosmoChatListener {
                             cosmo.playHappySound();
                         } else if (response.contains("?")) {
                             cosmo.setMood("curious");
-                            cosmo.playCuriousSound();
+                            cosmo.playSound(com.astrolabs.etherealmind.common.registry.SoundRegistry.COSMO_CURIOUS.get());
                         } else if (response.contains("⚠") || response.contains("danger")) {
                             cosmo.setMood("alert");
-                            cosmo.playAlertSound();
+                            cosmo.playSound(com.astrolabs.etherealmind.common.registry.SoundRegistry.COSMO_ALERT.get());
                         }
                     });
                 });
