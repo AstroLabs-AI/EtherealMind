@@ -26,24 +26,24 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use cute model which has proper spherical appearance
-        ResourceLocation cuteModel = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_cute.geo.json");
-        EtherealMind.LOGGER.info("Loading COSMO model: " + cuteModel.toString());
-        return cuteModel;
+        // Use geometric model with orbit ring and tails
+        ResourceLocation geometricModel = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_geometric.geo.json");
+        EtherealMind.LOGGER.info("Loading COSMO model: " + geometricModel.toString());
+        return geometricModel;
     }
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use the cute texture which matches the cute model
-        ResourceLocation cuteTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_cute.png");
-        EtherealMind.LOGGER.info("Loading COSMO texture: " + cuteTexture.toString());
-        return cuteTexture;
+        // Use the improved texture with 3D arm textures
+        ResourceLocation improvedTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_improved.png");
+        EtherealMind.LOGGER.info("Loading COSMO texture: " + improvedTexture.toString());
+        return improvedTexture;
     }
     
     @Override
     public ResourceLocation getAnimationResource(CosmoEntity animatable) {
-        // Use cute animations which match the model
-        return new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo_cute.animation.json");
+        // Use geometric animations
+        return new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo_geometric.animation.json");
     }
     
     private boolean useDetailedModel() {
