@@ -34,10 +34,10 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getTextureResource(CosmoEntity object) {
-        // Use the improved texture with 3D arm textures
-        ResourceLocation improvedTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_improved.png");
-        EtherealMind.LOGGER.info("Loading COSMO texture: " + improvedTexture.toString());
-        return improvedTexture;
+        // Use geometric texture for geometric model
+        ResourceLocation geometricTexture = new ResourceLocation(EtherealMind.MOD_ID, "textures/entity/cosmo_geometric.png");
+        EtherealMind.LOGGER.info("Loading COSMO texture: " + geometricTexture.toString());
+        return geometricTexture;
     }
     
     @Override
