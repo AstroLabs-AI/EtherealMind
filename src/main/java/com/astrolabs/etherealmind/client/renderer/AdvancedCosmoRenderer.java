@@ -35,7 +35,7 @@ public class AdvancedCosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
         
         @Override
         protected RenderType getRenderType(CosmoEntity animatable) {
-            return RenderType.entityTranslucentEmissive(EMISSIVE_TEXTURE);
+            return RenderType.entityTranslucentEmissive(getTextureLocation(animatable));
         }
     }
     
@@ -50,7 +50,8 @@ public class AdvancedCosmoRenderer extends GeoEntityRenderer<CosmoEntity> {
     
     @Override
     public ResourceLocation getTextureLocation(CosmoEntity entity) {
-        return TEXTURE;
+        // Delegate to the model to get the correct texture (geometric model texture)
+        return this.getGeoModel().getTextureResource(entity);
     }
     
     @Override

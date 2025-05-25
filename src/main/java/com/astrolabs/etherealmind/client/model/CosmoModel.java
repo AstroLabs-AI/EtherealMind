@@ -26,10 +26,10 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getModelResource(CosmoEntity object) {
-        // Use improved model with 3D arms and smaller size
-        ResourceLocation improvedModel = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_improved.geo.json");
-        EtherealMind.LOGGER.info("Loading COSMO model: " + improvedModel.toString());
-        return improvedModel;
+        // Use geometric model with orbit ring and tails
+        ResourceLocation geometricModel = new ResourceLocation(EtherealMind.MOD_ID, "geo/cosmo_geometric.geo.json");
+        EtherealMind.LOGGER.info("Loading COSMO model: " + geometricModel.toString());
+        return geometricModel;
     }
     
     @Override
@@ -42,8 +42,8 @@ public class CosmoModel extends GeoModel<CosmoEntity> {
     
     @Override
     public ResourceLocation getAnimationResource(CosmoEntity animatable) {
-        // Use cute animations that match the model
-        return CUTE_ANIMATION;
+        // Use geometric animations
+        return new ResourceLocation(EtherealMind.MOD_ID, "animations/cosmo_geometric.animation.json");
     }
     
     private boolean useDetailedModel() {
