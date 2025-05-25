@@ -133,12 +133,11 @@ public class CosmoCompanionScreen extends AbstractContainerScreen<DimensionalSto
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
         
         // Draw main background
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
         
         // Draw current view content
         switch (currentView) {

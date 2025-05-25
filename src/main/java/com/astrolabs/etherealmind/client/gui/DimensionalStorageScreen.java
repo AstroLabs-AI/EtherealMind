@@ -123,8 +123,7 @@ public class DimensionalStorageScreen extends AbstractContainerScreen<Dimensiona
     
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 512, 512);
     }
     
     @Override
