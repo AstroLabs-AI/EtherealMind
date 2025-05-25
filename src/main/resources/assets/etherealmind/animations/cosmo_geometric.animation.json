@@ -54,45 +54,38 @@
       "loop": true,
       "animation_length": 1,
       "bones": {
+        "core": {
+          "position": {
+            "0.0": {"vector": [0, 0, 0]},
+            "0.25": {"vector": [0, 0.3, 0]},
+            "0.5": {"vector": [0, 0, 0]},
+            "0.75": {"vector": [0, 0.3, 0]},
+            "1.0": {"vector": [0, 0, 0]}
+          }
+        },
         "orbit_ring": {
           "rotation": {
             "0.0": {"vector": [0, 0, 0]},
             "1.0": {"vector": [0, 720, 0]}
           }
-        },
-        "core": {
-          "rotation": {
-            "0.0": {"vector": [5, 0, 0]},
-            "0.25": {"vector": [5, 0, 5]},
-            "0.5": {"vector": [5, 0, 0]},
-            "0.75": {"vector": [5, 0, -5]},
-            "1.0": {"vector": [5, 0, 0]}
-          }
         }
       }
     },
-    "animation.cosmo.interact": {
-      "loop": false,
-      "animation_length": 0.5,
+    "animation.cosmo.happy": {
+      "loop": true,
+      "animation_length": 1.5,
       "bones": {
         "core": {
-          "scale": {
-            "0.0": {"vector": [1, 1, 1]},
-            "0.25": {"vector": [1.2, 1.2, 1.2]},
-            "0.5": {"vector": [1, 1, 1]}
-          }
-        },
-        "face_screen": {
-          "scale": {
-            "0.0": {"vector": [1, 1, 1]},
-            "0.25": {"vector": [1.5, 1.5, 1]},
-            "0.5": {"vector": [1, 1, 1]}
+          "rotation": {
+            "0.0": {"vector": [0, 0, 0]},
+            "0.75": {"vector": [0, 180, 0]},
+            "1.5": {"vector": [0, 360, 0]}
           }
         },
         "orbit_ring": {
           "rotation": {
             "0.0": {"vector": [0, 0, 0]},
-            "0.5": {"vector": [0, 180, 0]}
+            "1.5": {"vector": [0, 540, 0]}
           }
         }
       }
